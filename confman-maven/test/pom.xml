@@ -1,0 +1,39 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>confman-maven-test</artifactId>
+    <name>Appli test confman-maven-plugin</name>
+
+    <parent>
+        <groupId>com.ninjamind</groupId>
+        <artifactId>confman-maven</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>confman-maven-plugin</artifactId>
+                <groupId>com.ninjamind</groupId>
+                <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>help</goal>
+                            <goal>display-properties</goal>
+                            <goal>write-properties</goal>
+                        </goals>
+                        <configuration>
+                            <server>localhost</server>
+                            <app>SALES</app>
+                            <env>prd</env>
+                            <version>3.0.0</version>
+                            <port>8082</port>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
