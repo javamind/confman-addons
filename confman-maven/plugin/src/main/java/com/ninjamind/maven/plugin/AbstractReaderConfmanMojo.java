@@ -1,8 +1,6 @@
 package com.ninjamind.maven.plugin;
 
 import com.ninjamind.confman.ConfmanReadParameters;
-import com.ninjamind.confman.conf.ApplicationConfig;
-import com.ninjamind.confman.conf.ServerConfig;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

@@ -1,10 +1,9 @@
 package com.ninjamind.confman;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.conf.ApplicationConfig;
-import com.ninjamind.confman.conf.ServerConfig;
 import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.service.Preconditions;
+import com.ninjamind.confman.utils.Preconditions;
+import com.ninjamind.confman.utils.RestCallService;
 
 import java.util.Properties;
 
@@ -15,12 +14,15 @@ import java.util.Properties;
 public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadParameters, Properties>{
 
     /**
-     * This object is created via the method {@link com.ninjamind.confman.ConfmanReadParameters#from(com.ninjamind.confman.conf.ServerConfig)}.
-     * The aim is a more beautiful api
-     * @param serverConfig
+     *
+     * @param builder
      */
-    private ConfmanReadParameters(ServerConfig serverConfig) {
-        super(serverConfig);
+    private ConfmanReadParameters(Builder builder) {
+        super(builder.restCall, builder.server, builder.port);
+        this.appCode = builder.appCode;
+        this.versionNumber = builder.versionNumber;
+        this.envCode = builder.envCode;
+        this.instanceCode = builder.instanceCode;
     }
 
     /**
@@ -42,21 +44,12 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
      * @return all parameters in a {@link java.util.Properties}
      */
     @Override
-    public Properties execute() {
-        appConfmanConfig.check();
-        Preconditions.checkNotNull(appConfmanConfig.getVersionNumber(), "version number is required");
-        Preconditions.checkNotNull(appConfmanConfig.getEnvCode(), "environment code is required");
-
+    protected Properties executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/paramvalue/%s/version/%s/env/%s",
-                serverConfig.getServer(),
-                serverConfig.getPort(),
-                appConfmanConfig.getAppCode(),
-                appConfmanConfig.getVersionNumber(),
-                appConfmanConfig.getEnvCode());
+        String url = String.format("http://%s:%s/confman/paramvalue/%s/version/%s/env/%s",server, port, appCode, versionNumber, envCode);
 
         //Confman is called
-        String json = super.getRestCall().callRestApi(url);
+        String json = super.getRestCall().get(url);
 
         Properties properties = new Properties();
         if(json!=null && !json.isEmpty()){
@@ -67,46 +60,134 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
             for(ConfmanDto param : parameters){
                 //A parameter can be linked ton an instance or not. If we ask a filter we keep the application parameters
                 //and the parameters of the instance passed by the method arguments
-                if(appConfmanConfig.getInstanceCode()!=null && (param.getCodeInstance()==null || param.getCodeInstance().equals(appConfmanConfig.getInstanceCode()))){
+                if(instanceCode!=null && (param.getCodeInstance()==null || param.getCodeInstance().equals(instanceCode))){
                     properties.put(param.getCode(), param.getLabel());
                 }
-                else if(appConfmanConfig.getInstanceCode()==null){
+                else if(instanceCode==null){
                     //If no filter is asked the parameters are suffixed by the instance code
-                    properties.put(param.getCode().concat(param.getCodeInstance()!=null ? "" + param.getCodeInstance() : ""), param.getLabel());
+                    properties.put(param.getCode().concat(param.getCodeInstance()!=null ? "." + param.getCodeInstance() : ""), param.getLabel());
                 }
             }
         }
         return properties;
     }
 
-    /**
-     * Returns an operation which read all the parameters values for an applicaton in Confman
-     * @param serverConfig param to call Confman
-     */
-    public static ConfmanReadParameters from(ServerConfig serverConfig) {
-        return new ConfmanReadParameters(serverConfig);
+    @Override
+    protected void checkData() {
+        Preconditions.checkNotNull(appCode, "application code is required");
+        Preconditions.checkNotNull(versionNumber, "version number is required");
+        Preconditions.checkNotNull(envCode, "environment code is required");
     }
 
     /**
-     * Complete the operation with information to describe the target application. You have to give
-     * <ul>
-     *     <li>application code</li>
-     *     <li>environment code</li>
-     *     <li>version</li>
-     *     <li>instance is not required</li>
-     * </ul>
-     * For example
-     * <pre>
-     *     ApplicationConfig.application("APP").env("DEV").version("1.0.0").build()
-     * </pre>
-     * or
-     * <pre>
-     *     ApplicationConfig.application("APP").env("DEV").version("1.0.0").instance("intance1").build()
-     * </pre>
-     * @param appConfmanConfig param to define an application
+     * Returns an operation which read all the parameters values for an applicaton in Confman
+     * @param server param to call Confman
      */
-    public ConfmanReadParameters forApp(ApplicationConfig appConfmanConfig) {
-        this.appConfmanConfig = appConfmanConfig;
-        return this;
+    public static Builder from(String server) {
+        return new Builder(server);
     }
+
+    /**
+     * A builder used to create this operation. Such a builder may only be used once. Once it has built its Insert
+     * operation, all its methods throw an {@link IllegalStateException}.
+     * @author Guillaume EHRET
+     */
+    public static final class Builder {
+        public static final String ALREADY_BEEN_BUILT = "The ConfmanReadParameters has already been built";
+        private boolean built;
+        protected String server;
+        protected Integer port = DEFAULT_PORT;
+        protected String appCode;
+        protected String versionNumber;
+        protected String envCode;
+        protected String instanceCode;
+        protected RestCallService restCall;
+
+        /**
+         * Construct a new Builder.Set the server name use to call Confman server in the http request (http://server:port)
+         * @param server
+         */
+        public Builder(String server) {
+            this.server = server;
+        }
+
+        /**
+         * Set the server port number use to call Confman server in the http request (http://server:port)
+         * @param port
+         * @return
+         */
+        public Builder onPort(Integer port) {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            this.port = port;
+            return this;
+        }
+
+        /**
+         * Set application code.
+         * @param appCode
+         * @return
+         */
+        public Builder forApp(String appCode) {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            this.appCode = appCode;
+            return this;
+        }
+
+        /**
+         * Set environment code
+         * @param envCode
+         * @return
+         */
+        public Builder env(String envCode) {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            this.envCode = envCode;
+            return this;
+        }
+
+        /**
+         * Set version number
+         * @param versionNumber
+         * @return
+         */
+        public Builder version(String versionNumber) {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            this.versionNumber = versionNumber;
+            return this;
+        }
+
+        /**
+         * Set a label for the parameter (APPLICATION or INSTANCE)
+         * @param instanceCode
+         * @return
+         */
+        public Builder instance(String instanceCode) {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            this.instanceCode = instanceCode;
+            return this;
+        }
+
+        /**
+         * Builds the ApplicationConfig.
+         * @return
+         * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
+         * column has been specified.
+         */
+        public void execute() {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            built = true;
+            new ConfmanReadParameters(this).execute();
+        }
+
+        /**
+         * Use in a text context
+         * @param restCall
+         */
+        public ConfmanReadParameters build(RestCallService restCall) {
+            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
+            built = true;
+            this.restCall = restCall;
+            return new ConfmanReadParameters(this);
+        }
+    }
+
 }

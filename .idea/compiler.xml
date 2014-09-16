@@ -23,6 +23,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="confman-java" />
+        <module name="confman-java-test" />
         <module name="confman-maven-plugin" />
         <module name="confman-maven-test" />
       </profile>
@@ -30,6 +31,7 @@
     <bytecodeTargetLevel>
       <module name="confman-addons" target="1.6" />
       <module name="confman-java" target="1.6" />
+      <module name="confman-java-test" target="1.8" />
       <module name="confman-maven" target="1.6" />
       <module name="confman-maven-plugin" target="1.6" />
       <module name="confman-maven-test" target="1.6" />

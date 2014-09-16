@@ -10,7 +10,9 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>confman-java</module>
+        <module>confman-java-test</module>
         <module>confman-maven</module>
+
     </modules>
 
 
