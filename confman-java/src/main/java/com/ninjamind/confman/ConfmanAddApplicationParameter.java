@@ -1,7 +1,6 @@
 package com.ninjamind.confman;
 
 import com.ninjamind.confman.utils.Preconditions;
-import com.ninjamind.confman.utils.RestCallService;
 
 /**
  * Call cofman to read parameters values
@@ -11,7 +10,7 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
 
     private ConfmanAddApplicationParameter(Builder builder){
-        super(builder.restCall, builder.server, builder.port);
+        super(builder.server, builder.port);
         this.appCode = builder.appCode;
         this.paramCode = builder.paramCode;
         this.label = builder.paramLabel;
@@ -60,7 +59,6 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
         protected String paramCode;
         protected String paramLabel;
         protected String typeParameter = DEFAULT_TYPE_PARAM;
-        protected RestCallService restCall;
 
         /**
          * Construct a new Builder.Set the server name use to call Confman server in the http request (http://server:port)
@@ -140,15 +138,5 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
             new ConfmanAddApplicationParameter(this).execute();
         }
 
-        /**
-         * Use in a text context
-         * @param restCall
-         */
-        public ConfmanAddApplicationParameter build(RestCallService restCall) {
-            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            built = true;
-            this.restCall = restCall;
-            return new ConfmanAddApplicationParameter(this);
-        }
     }
 }

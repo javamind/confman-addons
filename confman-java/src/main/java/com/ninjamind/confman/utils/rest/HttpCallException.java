@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package com.ninjamind.confman.utils;
+package com.ninjamind.confman.utils.rest;
 
 /**
  * Exception thrown on problem with rest calls
  *
  * @author Guillaume EHRET
  */
-public class RestCallException extends RuntimeException{
-    public RestCallException() {
+public class HttpCallException extends RuntimeException{
+    public HttpCallException() {
     }
 
-    public RestCallException(String message) {
+    public HttpCallException(String message) {
         super(message);
     }
 
-    public RestCallException(String message, Throwable cause) {
+    public HttpCallException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public RestCallException(Throwable cause) {
+    public HttpCallException(Throwable cause) {
         super(cause);
     }
 

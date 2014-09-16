@@ -1,7 +1,6 @@
 package com.ninjamind.confman;
 
 import com.ninjamind.confman.utils.Preconditions;
-import com.ninjamind.confman.utils.RestCallService;
 
 /**
  * An operation that Confman will be execute.
@@ -10,8 +9,6 @@ import com.ninjamind.confman.utils.RestCallService;
 public abstract class AbstractConfmanOperation<O, T> {
     public static final int DEFAULT_PORT = 8080;
     public static final String DEFAULT_TYPE_PARAM = "APPLICATION";
-
-    private RestCallService restCall;
 
     protected String appCode;
     protected String versionNumber;
@@ -26,10 +23,10 @@ public abstract class AbstractConfmanOperation<O, T> {
 
     /**
      * Constuctor
-     * @param restCall
+     * @param server confman
+     * @param port of the server
      */
-    protected AbstractConfmanOperation(RestCallService restCall, String server, Integer port) {
-        this.restCall = restCall;
+    protected AbstractConfmanOperation(String server, Integer port) {
         this.server = server;
         this.port = port;
     }
@@ -56,25 +53,6 @@ public abstract class AbstractConfmanOperation<O, T> {
      */
     protected abstract void checkData();
 
-    /**
-     * Create a Restcall object.
-     * @return
-     */
-    protected RestCallService getRestCall() {
-        if(restCall==null){
-            restCall = new RestCallService();
-        }
-        return restCall;
-    }
-
-    /**
-     * Injection in the tests
-     * @param restCall
-     */
-    public O setRestCall(RestCallService restCall) {
-        this.restCall = restCall;
-        return (O) this;
-    }
 
 
 

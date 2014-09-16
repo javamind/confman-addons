@@ -2,8 +2,8 @@ package com.ninjamind.confman;
 
 import com.google.gson.Gson;
 import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
-import com.ninjamind.confman.utils.RestCallService;
 
 import java.util.Properties;
 
@@ -18,7 +18,7 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
      * @param builder
      */
     private ConfmanReadParameters(Builder builder) {
-        super(builder.restCall, builder.server, builder.port);
+        super(builder.server, builder.port);
         this.appCode = builder.appCode;
         this.versionNumber = builder.versionNumber;
         this.envCode = builder.envCode;
@@ -49,7 +49,7 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
         String url = String.format("http://%s:%s/confman/paramvalue/%s/version/%s/env/%s",server, port, appCode, versionNumber, envCode);
 
         //Confman is called
-        String json = super.getRestCall().get(url);
+        String json = HttpCalls.get(url);
 
         Properties properties = new Properties();
         if(json!=null && !json.isEmpty()){
@@ -101,7 +101,6 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
         protected String versionNumber;
         protected String envCode;
         protected String instanceCode;
-        protected RestCallService restCall;
 
         /**
          * Construct a new Builder.Set the server name use to call Confman server in the http request (http://server:port)
@@ -178,16 +177,6 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
             new ConfmanReadParameters(this).execute();
         }
 
-        /**
-         * Use in a text context
-         * @param restCall
-         */
-        public ConfmanReadParameters build(RestCallService restCall) {
-            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            built = true;
-            this.restCall = restCall;
-            return new ConfmanReadParameters(this);
-        }
     }
 
 }
