@@ -12,6 +12,8 @@
         <module>confman-java</module>
         <module>confman-java-test</module>
         <module>confman-maven</module>
+        <module>confman-maven-test</module>
+        <module>confman-command</module>
 
     </modules>
 

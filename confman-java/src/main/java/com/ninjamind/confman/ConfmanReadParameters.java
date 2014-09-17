@@ -171,10 +171,10 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public void execute() {
+        public Properties execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
-            new ConfmanReadParameters(this).execute();
+            return new ConfmanReadParameters(this).execute();
         }
 
     }

@@ -1,12 +1,18 @@
 package com.ninjamind.confman.utils.rest;
 
 import com.ninjamind.confman.utils.rest.HttpCallException;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Call HTTP wia method GET
@@ -15,7 +21,7 @@ import java.io.UnsupportedEncodingException;
 public class HttpPostCall extends AbstractHttpCall {
     @Override
     protected HttpRequestBase getRequest(String urlToCall) {
-        return new HttpGet(urlToCall);
+        return new HttpPost(urlToCall);
     }
 
     /**
@@ -24,12 +30,14 @@ public class HttpPostCall extends AbstractHttpCall {
      * @param args
      */
     @Override
-    protected void setParameters(HttpRequestBase request, String ... args) {
+    protected void setParameters(HttpRequestBase request, Map<String, String> args) {
         try {
             if(args!=null) {
-                for (String arg : args) {
-                    ((HttpPost) request).setEntity(new StringEntity(arg));
+                List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+                for (Map.Entry<String, String> arg : args.entrySet()) {
+                    nvps.add(new BasicNameValuePair(arg.getKey(), arg.getValue()));
                 }
+                ((HttpPost) request).setEntity(new UrlEncodedFormEntity(nvps));
             }
         }
         catch (UnsupportedEncodingException e){

@@ -3,6 +3,8 @@ package com.ninjamind.confman.utils.rest;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 
+import java.util.Map;
+
 /**
  * Call HTTP wia method GET
  * @author Guillaume EHRET
@@ -19,7 +21,7 @@ public class HttpGetCall extends AbstractHttpCall {
      * @param args
      */
     @Override
-    protected void setParameters(HttpRequestBase request, String ... args) {
+    protected void setParameters(HttpRequestBase request, Map<String, String> args) {
         //Nothing
     }
 }

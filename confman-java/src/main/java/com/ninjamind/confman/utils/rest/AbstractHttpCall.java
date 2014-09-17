@@ -10,6 +10,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 /**
  * Rest call are similar. They all used a Http connexion. This class group all the common code
@@ -22,7 +23,7 @@ public abstract class AbstractHttpCall {
      * @param urlToCall
      * @return
      */
-    public String execute(String urlToCall, String ... args) {
+    public String execute(String urlToCall, Map<String, String> args) {
         Preconditions.checkNotNull(urlToCall, "URL is required");
         HttpClient client = HttpClientBuilder.create().build();
         BufferedReader br = null;
@@ -30,7 +31,7 @@ public abstract class AbstractHttpCall {
 
         try {
             HttpRequestBase request = getRequest(urlToCall);
-            setParameters(request);
+            setParameters(request, args);
             HttpResponse response = client.execute(request);
             br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String l = null;
@@ -53,6 +54,6 @@ public abstract class AbstractHttpCall {
 
     protected abstract HttpRequestBase getRequest(String urlToCall);
 
-    protected abstract void setParameters(HttpRequestBase request, String ... args);
+    protected abstract void setParameters(HttpRequestBase request, Map<String, String> args);
 
 }

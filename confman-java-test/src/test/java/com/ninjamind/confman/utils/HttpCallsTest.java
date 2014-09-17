@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.ninjamind.confman.controller.api.ParameterValueApiController;
 import com.ninjamind.confman.domain.Parameter;
 import com.ninjamind.confman.domain.ParameterValue;
+import com.ninjamind.confman.dto.ConfmanDto;
 import com.ninjamind.confman.service.ParameterValueFacade;
 import net.codestory.http.WebServer;
 import org.apache.http.HttpResponse;
@@ -23,14 +24,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
- * Test of {@link com.ninjamind.confman.utils.RestCallService}
+ * Test of {@link com.ninjamind.confman.utils.HttpCalls}
  *
  * @author Guillaume EHRET
  */
@@ -48,6 +51,10 @@ public class HttpCallsTest {
         webServer = new WebServer(
                 routes -> routes
                         .get("/confman/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
+                        .post("/confman/paramvalue", (context) -> {
+                            ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"),ConfmanDto.class);
+                            return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
+                        })
         ).startOnRandomPort();
     }
 
@@ -85,6 +92,36 @@ public class HttpCallsTest {
     public void httpGetShouldThrowExceptionWhenUrlNull(){
         try {
             HttpCalls.get(null);
+        }
+        catch (Exception e){
+            assertThat(e).isInstanceOf(IllegalArgumentException.class).hasMessage("URL is required");
+        }
+
+    }
+
+    @Test
+    public void httpPostShouldReceiveJson(){
+        Map<String, String> map = new HashMap<>();
+        map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
+        //We try a get call
+        String result = HttpCalls.post(String.format("http://localhost:%d/confman/paramvalue", webServer.port()), map);
+        assertThat(result).isNotEmpty();
+        assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
+    }
+
+
+    @Test
+    public void httpPostShouldNotReceiveJsonWhenUrlInvalid(){
+        //We try a get call
+        String result = HttpCalls.post(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
+        //Http fluent return a HTML page with an error
+        assertThat(result).isNotEmpty().contains("Page not found");
+    }
+
+    @Test
+    public void httpPostShouldThrowExceptionWhenUrlNull(){
+        try {
+            HttpCalls.post(null, null);
         }
         catch (Exception e){
             assertThat(e).isInstanceOf(IllegalArgumentException.class).hasMessage("URL is required");
