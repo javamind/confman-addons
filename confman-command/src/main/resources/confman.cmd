@@ -15,7 +15,7 @@ if "%JAVA_HOME%"=="" (
  set JAVA_CMD="%JAVA_HOME%\bin\java.exe"
 )
 
-%JAVA_CMD% -jar confman-command-${project.version}.jar
+%JAVA_CMD% -jar confman-command-${project.version}.jar %*
 
 @REM Save the exit code
 set JAVA_EXIT_CODE=%ERRORLEVEL%

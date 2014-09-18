@@ -20,7 +20,7 @@
                 <include>confman.properties</include>
                 <include>log4j2.xml</include>
                 <include>confman</include>
-                <include>confman.bat</include>
+                <include>confman.cmd</include>
                 <include>version.txt</include>
             </includes>
             <filtered>true</filtered>

@@ -24,7 +24,7 @@ if $cygwin; then
   CP=$(cygpath -pw "$CP")
 fi
 
-"$JAVA_CMD" -jar "$CP"
+"$JAVA_CMD" -jar "$CP" $@
 
 # Save the exit code
 JAVA_EXIT_CODE=$?
