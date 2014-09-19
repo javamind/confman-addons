@@ -1,9 +1,6 @@
 package com.ninjamind.confman;
 
-import com.ninjamind.confman.domain.Instance;
-import com.ninjamind.confman.domain.ParameterValue;
 import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.dto.ParameterValueDto;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
@@ -16,11 +13,11 @@ import java.util.Properties;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test of {@link com.ninjamind.confman.ConfmanReadParameters}
+ * Test of {@link ConfmanReadParameterValues}
  *
  * @author Guillaume EHRET
  */
-public class ConfmanReadParametersTest {
+public class ConfmanReadParameterValuesTest {
     private static WebServer webServer;
 
     /**
@@ -52,22 +49,22 @@ public class ConfmanReadParametersTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenReadPropertiesWithServerNull(){
-        ConfmanReadParameters.from(null).onPort(8080).forApp("APP").env("dev").version("1.0.0").execute();
+        ConfmanReadParameterValues.from(null).onPort(8080).forApp("APP").env("dev").version("1.0.0").execute();
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenReadPropertiesWithAppCodeNull(){
-        ConfmanReadParameters.from("server").onPort(8080).env("dev").version("1.0.0").execute();
+        ConfmanReadParameterValues.from("server").onPort(8080).env("dev").version("1.0.0").execute();
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenReadPropertiesWithVersionNumberNull(){
-        ConfmanReadParameters.from("server").onPort(8080).forApp("APP").env("dev").execute();
+        ConfmanReadParameterValues.from("server").onPort(8080).forApp("APP").env("dev").execute();
     }
 
     @Test
     public void shouldFindPropertiesWhenReadProperties(){
-        Properties properties = ConfmanReadParameters.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").execute();
+        Properties properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").execute();
 
         assertThat(properties).isNotEmpty();
         //An application parameter
@@ -79,7 +76,7 @@ public class ConfmanReadParametersTest {
 
     @Test
     public void shouldFindPropertiesWhenReadPropertiesByEnvAndInstance(){
-        Properties properties = ConfmanReadParameters.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").instance("WP450").execute();
+        Properties properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").instance("WP450").execute();
 
         assertThat(properties).isNotEmpty();
         //An application parameter

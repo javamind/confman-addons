@@ -9,15 +9,6 @@ import com.ninjamind.confman.utils.Preconditions;
 public abstract class AbstractConfmanOperation<O, T> {
     public static final int DEFAULT_PORT = 8080;
     public static final String DEFAULT_TYPE_PARAM = "APPLICATION";
-
-    protected String appCode;
-    protected String versionNumber;
-    protected String envCode;
-    protected String paramCode;
-    protected String instanceCode;
-    protected String label;
-    protected String typeParameter;
-    protected boolean generateWithLastParameterValuesSet;
     protected String server;
     protected Integer port;
 

@@ -1,36 +1,18 @@
 package com.ninjamind.confman.utils;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.controller.api.ParameterValueApiController;
-import com.ninjamind.confman.domain.Parameter;
 import com.ninjamind.confman.domain.ParameterValue;
 import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.service.ParameterValueFacade;
 import net.codestory.http.WebServer;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.assertj.core.api.Assertions;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
 
 /**
  * Test of {@link com.ninjamind.confman.utils.HttpCalls}
@@ -53,6 +35,10 @@ public class HttpCallsTest {
                         .get("/confman/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
                         .post("/confman/paramvalue", (context) -> {
                             ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"),ConfmanDto.class);
+                            return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
+                        })
+                        .put("/confman/paramvalue", (context) -> {
+                            ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"), ConfmanDto.class);
                             return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
         ).startOnRandomPort();
@@ -124,6 +110,35 @@ public class HttpCallsTest {
             HttpCalls.post(null, null);
         }
         catch (Exception e){
+            assertThat(e).isInstanceOf(IllegalArgumentException.class).hasMessage("URL is required");
+        }
+
+    }
+
+    @Test
+    public void httpPutShouldReceiveJson() {
+        Map<String, String> map = new HashMap<>();
+        map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
+        //We try a get call
+        String result = HttpCalls.put(String.format("http://localhost:%d/confman/paramvalue", webServer.port()), map);
+        assertThat(result).isNotEmpty();
+        assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
+    }
+
+
+    @Test
+    public void httpPutShouldNotReceiveJsonWhenUrlInvalid() {
+        //We try a get call
+        String result = HttpCalls.put(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
+        //Http fluent return a HTML page with an error
+        assertThat(result).isNotEmpty().contains("Page not found");
+    }
+
+    @Test
+    public void httpPutShouldThrowExceptionWhenUrlNull() {
+        try {
+            HttpCalls.put(null, null);
+        } catch (Exception e) {
             assertThat(e).isInstanceOf(IllegalArgumentException.class).hasMessage("URL is required");
         }
 

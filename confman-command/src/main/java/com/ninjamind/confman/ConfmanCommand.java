@@ -4,6 +4,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.google.common.base.Strings;
+import com.ninjamind.confman.validator.ObjectTypeValidator;
+import com.ninjamind.confman.validator.ParameterTypeValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.LoggerConfig;
@@ -26,7 +28,7 @@ public class ConfmanCommand {
     public static final String LINE_CHARACTER = "=";
     public static final int LINE_WIDTH = 75;
 
-    @Parameter(names = {"-o", "--object"}, required = true, description = "Object type : param, value, instance, version")
+    @Parameter(names = {"-o", "--object"}, required = true, description = "Object type : param, value, instance, version", validateWith = ObjectTypeValidator.class)
     private String objectType;
 
     @Parameter(names = {"-h", "--help"}, help = true, description = "Print help")
@@ -41,7 +43,7 @@ public class ConfmanCommand {
     @Parameter(names = "-update", description = "Update datas")
     private boolean update = false;
 
-    @Parameter(names = {"-t", "--typparam"}, description = "Parameter type (INSTANCE or APPLICATION)")
+    @Parameter(names = {"-t", "--typparam"}, description = "Parameter type (INSTANCE or APPLICATION)", validateWith = ParameterTypeValidator.class)
     private String typparam;
 
     @Parameter(names = {"-a", "--app"}, description = "Application code")
@@ -78,7 +80,7 @@ public class ConfmanCommand {
         try{
             ConfmanCommand  confmanCommand = new ConfmanCommand();
             new JCommander(confmanCommand, args);
-            confmanCommand.run(args);
+            confmanCommand.run();
         }
         catch (RuntimeException e) {
             LOG.error("Unexpected error", e);
@@ -92,27 +94,26 @@ public class ConfmanCommand {
     /**
      * Print the version of the command line
      */
-    public void run(String[] args){
+    public void run(){
         printVersion();
 
-        if(help){
-            LOG.info("HELP ");
-            LOG.info("====");
-            printUsage();
-        }
-        else if(read){
-            LOG.info("READ ");
-            LOG.info("====");
-        }
-        else if(update){
-            LOG.info("UPDATE ");
-            LOG.info("======");
-        }
-        else if(create){
-            LOG.info("CREATE ");
-            LOG.info("======");
+        if(read || update || create){
+            //The operation is specific for an object type
+            switch (objectType){
+                case ObjectTypeValidator.OBJECT_INSTANCE:
+
+                    break;
+                case ObjectTypeValidator.OBJECT_PARAM:
+                    break;
+                case ObjectTypeValidator.OBJECT_VALUE:
+                    break;
+                case ObjectTypeValidator.OBJECT_VERSION:
+
+            }
         }
         else{
+            LOG.info("HELP ");
+            LOG.info("====");
             printUsage();
         }
     }

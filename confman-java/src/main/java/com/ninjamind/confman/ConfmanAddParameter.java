@@ -3,13 +3,18 @@ package com.ninjamind.confman;
 import com.ninjamind.confman.utils.Preconditions;
 
 /**
- * Call cofman to read parameters values
+ * Call cofman to add a parameter to an application
+ *
  * @author Guillaume EHRET
  */
-public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<ConfmanAddApplicationParameter, Void>{
+public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddParameter, Void> {
 
+    protected String appCode;
+    protected String paramCode;
+    protected String label;
+    protected String typeParameter;
 
-    private ConfmanAddApplicationParameter(Builder builder){
+    private ConfmanAddParameter(Builder builder) {
         super(builder.server, builder.port);
         this.appCode = builder.appCode;
         this.paramCode = builder.paramCode;
@@ -19,11 +24,13 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
     /**
      * Add a parameter to an application
+     *
      * @return
      */
     @Override
     protected Void executeAction() {
-
+        //URL construction
+        String url = String.format("http://%s:%s/confman/param/%s/app/%s", server, port, paramCode, appCode);
         return null;
     }
 
@@ -37,6 +44,7 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
     /**
      * Returns an operation which read all the parameters values for an applicaton in Confman
+     *
      * @param server
      */
     public static Builder from(String server) {
@@ -44,17 +52,13 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
     }
 
 
-
     /**
      * A builder used to create this operation. Such a builder may only be used once. Once it has built its Insert
      * operation, all its methods throw an {@link IllegalStateException}.
+     *
      * @author Guillaume EHRET
      */
-    public static final class Builder {
-        public static final String ALREADY_BEEN_BUILT = "The ConfmanAddApplicationParameter has already been built";
-        protected String server;
-        protected Integer port = DEFAULT_PORT;
-        private boolean built;
+    public static final class Builder extends AbstractConfmanBuilder<Builder>{
         protected String appCode;
         protected String paramCode;
         protected String paramLabel;
@@ -62,25 +66,16 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
         /**
          * Construct a new Builder.Set the server name use to call Confman server in the http request (http://server:port)
+         *
          * @param server
          */
         public Builder(String server) {
-            this.server = server;
-        }
-
-        /**
-         * Set the server port number use to call Confman server in the http request (http://server:port)
-         * @param port
-         * @return
-         */
-        public Builder onPort(Integer port) {
-            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            this.port = port;
-            return this;
+            super(server);
         }
 
         /**
          * Set application code.
+         *
          * @param appCode
          * @return
          */
@@ -92,6 +87,7 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
         /**
          * Set a code for the parameter.
+         *
          * @param paramCode
          * @return
          */
@@ -103,6 +99,7 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
         /**
          * Set a label for the parameter.
+         *
          * @param paramLabel
          * @return
          */
@@ -114,20 +111,21 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
 
         /**
          * Set a label for the parameter (APPLICATION or INSTANCE)
+         *
          * @param typeParameter
          * @return
          */
         public Builder type(String typeParameter) {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            if(typeParameter!=null &&
-                    (DEFAULT_TYPE_PARAM.equals(typeParameter.toUpperCase()) || "INSTANCE".equals(typeParameter.toUpperCase()))){
+            if (typeParameter != null &&
+                    (DEFAULT_TYPE_PARAM.equals(typeParameter.toUpperCase()) || "INSTANCE".equals(typeParameter.toUpperCase()))) {
                 this.typeParameter = typeParameter;
             }
             return this;
         }
 
         /**
-         * Builds the ApplicationConfig.
+         * Execute operation
          * @return
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
@@ -135,7 +133,7 @@ public class ConfmanAddApplicationParameter extends AbstractConfmanOperation<Con
         public void execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
-            new ConfmanAddApplicationParameter(this).execute();
+            new ConfmanAddParameter(this).execute();
         }
 
     }

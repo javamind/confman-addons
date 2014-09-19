@@ -1,6 +1,6 @@
 package com.ninjamind.maven.plugin;
 
-import com.ninjamind.confman.ConfmanReadParameters;
+import com.ninjamind.confman.ConfmanReadParameterValues;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -74,7 +74,7 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
         try{
             getLog().info(String.format("   Confman call on the URL http://%s:%s", server, port));
             getLog().info(String.format("   App=[%s] Version=[%s] Env=[%s] instance=[%s]", app, version, env, instance));
-            Properties properties = ConfmanReadParameters.from(server).onPort(port).forApp(app).version(version).env(env).instance(instance).execute();
+            Properties properties = ConfmanReadParameterValues.from(server).onPort(port).forApp(app).version(version).env(env).instance(instance).execute();
             getLog().info(String.format("   %d properties read", properties.size()));
 
             if(properties.size()>0){

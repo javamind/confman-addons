@@ -11,13 +11,18 @@ import java.util.Properties;
  * Call cofman to read parameters values
  * @author Guillaume EHRET
  */
-public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadParameters, Properties>{
+public class ConfmanReadParameterValues extends AbstractConfmanOperation<ConfmanReadParameterValues, Properties>{
+
+    protected String appCode;
+    protected String versionNumber;
+    protected String envCode;
+    protected String instanceCode;
 
     /**
      *
      * @param builder
      */
-    private ConfmanReadParameters(Builder builder) {
+    private ConfmanReadParameterValues(Builder builder) {
         super(builder.server, builder.port);
         this.appCode = builder.appCode;
         this.versionNumber = builder.versionNumber;
@@ -92,11 +97,7 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
      * operation, all its methods throw an {@link IllegalStateException}.
      * @author Guillaume EHRET
      */
-    public static final class Builder {
-        public static final String ALREADY_BEEN_BUILT = "The ConfmanReadParameters has already been built";
-        private boolean built;
-        protected String server;
-        protected Integer port = DEFAULT_PORT;
+    public static final class Builder extends AbstractConfmanBuilder<Builder>{
         protected String appCode;
         protected String versionNumber;
         protected String envCode;
@@ -107,18 +108,7 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
          * @param server
          */
         public Builder(String server) {
-            this.server = server;
-        }
-
-        /**
-         * Set the server port number use to call Confman server in the http request (http://server:port)
-         * @param port
-         * @return
-         */
-        public Builder onPort(Integer port) {
-            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            this.port = port;
-            return this;
+            super(server);
         }
 
         /**
@@ -166,7 +156,7 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
         }
 
         /**
-         * Builds the ApplicationConfig.
+         * Execute operation
          * @return
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
@@ -174,7 +164,7 @@ public class ConfmanReadParameters extends AbstractConfmanOperation<ConfmanReadP
         public Properties execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
-            return new ConfmanReadParameters(this).execute();
+            return new ConfmanReadParameterValues(this).execute();
         }
 
     }
