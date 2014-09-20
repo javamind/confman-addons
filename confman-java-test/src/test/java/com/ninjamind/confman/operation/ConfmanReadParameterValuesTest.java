@@ -1,6 +1,7 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
 import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.operation.ConfmanReadParameterValues;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
@@ -13,7 +14,7 @@ import java.util.Properties;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test of {@link ConfmanReadParameterValues}
+ * Test of {@link com.ninjamind.confman.operation.ConfmanReadParameterValues}
  *
  * @author Guillaume EHRET
  */

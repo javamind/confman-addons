@@ -1,6 +1,7 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
 import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.operation.ConfmanReadInstance;
 import net.codestory.http.WebServer;
 import org.assertj.core.api.Assertions;
 import org.mockito.MockitoAnnotations;
@@ -9,11 +10,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Test of {@link ConfmanReadParameter}
+ * Test of {@link com.ninjamind.confman.operation.ConfmanReadInstance}
  *
  * @author Guillaume EHRET
  */
-public class ConfmanReadParameterTest {
+public class ConfmanReadInstanceTest {
     private static WebServer webServer;
 
     /**
@@ -24,7 +25,7 @@ public class ConfmanReadParameterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/confman/param/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("JDBC URL"))
+                routes -> routes.get("/confman/instance/:code/app/:app/env/:env", (context, code, app, env) -> new ConfmanDto().setId(17L).setCode("WP450").setLabel("My instance"))
         ).startOnRandomPort();
     }
 
@@ -42,22 +43,27 @@ public class ConfmanReadParameterTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenServerNull() {
-        ConfmanReadParameter.from(null).onPort(8080).forApp("APP").code("jdbc.url").execute();
+        ConfmanReadInstance.from(null).onPort(8080).forApp("APP").code("wP450").env("dev").execute();
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenAppCodeNull() {
-        ConfmanReadParameter.from("server").code("jdbc.url").execute();
+        ConfmanReadInstance.from("server").code("wP450").env("dev").execute();
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenCodeNull() {
-        ConfmanReadParameter.from("server").onPort(8080).forApp("APP").execute();
+        ConfmanReadInstance.from("server").onPort(8080).forApp("APP").env("dev").execute();
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenCodeEnvNull() {
+        ConfmanReadInstance.from("server").onPort(8080).forApp("APP").code("wP450").execute();
     }
 
     @Test
     public void shouldReadParameter() {
-        Assertions.assertThat(ConfmanReadParameter.from("localhost").onPort(webServer.port()).forApp("APP").code("jdbc.url").execute().getLabel()).isEqualTo("JDBC URL");
+        Assertions.assertThat(ConfmanReadInstance.from("localhost").onPort(webServer.port()).forApp("APP").code("wP450").env("dev").execute().getLabel()).isEqualTo("My instance");
     }
 
 

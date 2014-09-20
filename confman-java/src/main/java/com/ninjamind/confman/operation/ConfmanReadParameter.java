@@ -1,36 +1,43 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
+import com.google.gson.Gson;
+import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
 /**
- * Call cofman to add a parameter to an application
+ * Call cofman to read a parameter
  *
  * @author Guillaume EHRET
  */
-public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddParameter, Void> {
+public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadParameter, ConfmanDto> {
 
     protected String appCode;
     protected String paramCode;
-    protected String label;
-    protected String typeParameter;
 
-    private ConfmanAddParameter(Builder builder) {
+    private ConfmanReadParameter(Builder builder) {
         super(builder.server, builder.port);
         this.appCode = builder.appCode;
         this.paramCode = builder.paramCode;
-        this.label = builder.paramLabel;
-        this.typeParameter = builder.typeParameter;
     }
 
     /**
-     * Add a parameter to an application
+     * Read a parameter to an application
      *
      * @return
      */
     @Override
-    protected Void executeAction() {
+    protected ConfmanDto executeAction() {
         //URL construction
         String url = String.format("http://%s:%s/confman/param/%s/app/%s", server, port, paramCode, appCode);
+
+        //Confman is called
+        String json = HttpCalls.get(url);
+        if (json != null && !json.isEmpty()) {
+            //We use Gson to read the parameters values in the flow
+            Gson gson = new Gson();
+            return gson.fromJson(json, ConfmanDto.class);
+        }
         return null;
     }
 
@@ -38,8 +45,6 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
     protected void checkData() {
         Preconditions.checkNotNull(this.appCode, "application code is required");
         Preconditions.checkNotNull(this.paramCode, "parameter code is required");
-        Preconditions.checkNotNull(this.label, "label is required");
-        Preconditions.checkNotNull(this.typeParameter, "parameter type is required");
     }
 
     /**
@@ -58,11 +63,9 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
      *
      * @author Guillaume EHRET
      */
-    public static final class Builder extends AbstractConfmanBuilder<Builder>{
+    public static final class Builder extends AbstractConfmanBuilder<Builder> {
         protected String appCode;
         protected String paramCode;
-        protected String paramLabel;
-        protected String typeParameter = DEFAULT_TYPE_PARAM;
 
         /**
          * Construct a new Builder.Set the server name use to call Confman server in the http request (http://server:port)
@@ -98,43 +101,15 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
         }
 
         /**
-         * Set a label for the parameter.
-         *
-         * @param paramLabel
-         * @return
-         */
-        public Builder label(String paramLabel) {
-            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            this.paramLabel = paramLabel;
-            return this;
-        }
-
-        /**
-         * Set a label for the parameter (APPLICATION or INSTANCE)
-         *
-         * @param typeParameter
-         * @return
-         */
-        public Builder type(String typeParameter) {
-            Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            if (typeParameter != null &&
-                    (DEFAULT_TYPE_PARAM.equals(typeParameter.toUpperCase()) || "INSTANCE".equals(typeParameter.toUpperCase()))) {
-                this.typeParameter = typeParameter;
-            }
-            return this;
-        }
-
-        /**
          * Execute operation
          * @return
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public void execute() {
+        public ConfmanDto execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
-            new ConfmanAddParameter(this).execute();
+            return new ConfmanReadParameter(this).execute();
         }
-
     }
 }

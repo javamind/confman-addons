@@ -1,4 +1,4 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
 import com.ninjamind.confman.dto.ConfmanDto;
@@ -6,35 +6,35 @@ import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
 /**
- * Call cofman to read a parameter
+ * Call confman to read a instance
  *
  * @author Guillaume EHRET
  */
-public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadParameter, ConfmanDto> {
+public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVersion, ConfmanDto> {
 
     protected String appCode;
-    protected String paramCode;
+    protected String versionCode;
 
-    private ConfmanReadParameter(Builder builder) {
+    private ConfmanReadVersion(Builder builder) {
         super(builder.server, builder.port);
         this.appCode = builder.appCode;
-        this.paramCode = builder.paramCode;
+        this.versionCode = builder.versionCode;;
     }
 
     /**
-     * Read a parameter to an application
+     * Read a instance to an application
      *
      * @return
      */
     @Override
     protected ConfmanDto executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/param/%s/app/%s", server, port, paramCode, appCode);
+        String url = String.format("http://%s:%s/confman/version/%s/app/%s", server, port, versionCode, appCode);
 
         //Confman is called
         String json = HttpCalls.get(url);
         if (json != null && !json.isEmpty()) {
-            //We use Gson to read the parameters values in the flow
+            //We use Gson to read the instances values in the flow
             Gson gson = new Gson();
             return gson.fromJson(json, ConfmanDto.class);
         }
@@ -44,11 +44,11 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
     @Override
     protected void checkData() {
         Preconditions.checkNotNull(this.appCode, "application code is required");
-        Preconditions.checkNotNull(this.paramCode, "parameter code is required");
+        Preconditions.checkNotNull(this.versionCode, "version code is required");
     }
 
     /**
-     * Returns an operation which read all the parameters values for an applicaton in Confman
+     * Returns an operation which read all the instances values for an applicaton in Confman
      *
      * @param server
      */
@@ -65,7 +65,7 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
      */
     public static final class Builder extends AbstractConfmanBuilder<Builder> {
         protected String appCode;
-        protected String paramCode;
+        protected String versionCode;
 
         /**
          * Construct a new Builder.Set the server name use to call Confman server in the http request (http://server:port)
@@ -89,14 +89,14 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
         }
 
         /**
-         * Set a code for the parameter.
+         * Set a code for the instance.
          *
-         * @param paramCode
+         * @param versionCode
          * @return
          */
-        public Builder code(String paramCode) {
+        public Builder version(String versionCode) {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
-            this.paramCode = paramCode;
+            this.versionCode = versionCode;
             return this;
         }
 
@@ -109,7 +109,7 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
         public ConfmanDto execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
-            return new ConfmanReadParameter(this).execute();
+            return new ConfmanReadVersion(this).execute();
         }
     }
 }

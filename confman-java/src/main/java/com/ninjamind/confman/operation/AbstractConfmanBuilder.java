@@ -1,8 +1,6 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
 import com.ninjamind.confman.utils.Preconditions;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * An operation that Confman will be execute.

@@ -1,4 +1,4 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
 import com.ninjamind.confman.dto.ConfmanDto;

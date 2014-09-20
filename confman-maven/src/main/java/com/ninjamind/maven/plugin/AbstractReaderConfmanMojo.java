@@ -1,6 +1,6 @@
 package com.ninjamind.maven.plugin;
 
-import com.ninjamind.confman.ConfmanReadParameterValues;
+import com.ninjamind.confman.operation.ConfmanReadParameterValues;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

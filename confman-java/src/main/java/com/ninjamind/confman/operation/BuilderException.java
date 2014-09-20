@@ -1,4 +1,4 @@
-package com.ninjamind.confman;
+package com.ninjamind.confman.operation;
 
 /**
  * @author Guillaume EHRET
