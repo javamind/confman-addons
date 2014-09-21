@@ -3,7 +3,10 @@ package com.ninjamind.confman;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+import com.google.gson.JsonSyntaxException;
+import com.ninjamind.confman.dto.ConfmanDto;
 import com.ninjamind.confman.validator.ObjectTypeValidator;
 import com.ninjamind.confman.validator.ParameterTypeValidator;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +20,9 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Entry point of the Confman command-line tool
@@ -62,25 +67,55 @@ public class ConfmanCommand {
     private String regenerate;
 
     @Parameter(names = {"-v", "--version"}, description = "Version code")
+    private String version;
+
+    @Parameter(names = {"-i", "--instance"}, description = "Instance code")
+    private String instance;
 
     /**
-     * Logger associé
+     * Logger
      */
     private static Logger LOG = LogManager.getLogger();
+
+    private static Properties properties;
 
     /**
      * Start Endpoint
      * @param args
      */
     public static void main(String[] args) {
-        LOG.info(Strings.repeat(LINE_CHARACTER, LINE_WIDTH));
-        LOG.error("             CONFMAN COMMAND LINE");
-        LOG.info(Strings.repeat(LINE_CHARACTER, LINE_WIDTH));
 
         try{
             ConfmanCommand  confmanCommand = new ConfmanCommand();
+
+
+            //We load the properties
+            try(
+                    InputStream is = confmanCommand.getClass().getClassLoader().getResource("confman.properties").openStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            ) {
+                properties = new Properties();
+                properties.load(is);
+            }
+            catch (IOException e){
+                LOG.error("--> [error] impossible to read the file application.properties " + e.getMessage());
+            }
+
+            LOG.info(Strings.repeat(LINE_CHARACTER, LINE_WIDTH));
+            LOG.error("             CONFMAN COMMAND LINE " + properties.getProperty("version"));
+            LOG.info(Strings.repeat(LINE_CHARACTER, LINE_WIDTH));
+
+
+            //The paramaters are interpreted
             new JCommander(confmanCommand, args);
-            confmanCommand.run();
+
+
+
+            //We execute the command
+            confmanCommand.execute();
+        }
+        catch (JsonSyntaxException e){
+            LOG.error("no data found");
         }
         catch (RuntimeException e) {
             LOG.error("Unexpected error", e);
@@ -94,21 +129,21 @@ public class ConfmanCommand {
     /**
      * Print the version of the command line
      */
-    public void run(){
-        printVersion();
-
+    public void execute(){
         if(read || update || create){
             //The operation is specific for an object type
             switch (objectType){
                 case ObjectTypeValidator.OBJECT_INSTANCE:
-
+                    executeInstance();
                     break;
                 case ObjectTypeValidator.OBJECT_PARAM:
+                    executeParam();
                     break;
                 case ObjectTypeValidator.OBJECT_VALUE:
+
                     break;
                 case ObjectTypeValidator.OBJECT_VERSION:
-
+                   executeVersion();
             }
         }
         else{
@@ -119,23 +154,74 @@ public class ConfmanCommand {
     }
 
     /**
-     * Print the version of the command line
+     * Operations for parameters values
      */
-    public void printVersion(){
-        try(
-                InputStream is = getClass().getClassLoader().getResource("version.txt").openStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        ){
-            //we open a stream, separe key and values and keep the line with the version
-            Optional<String[]> version = br.lines().map(line -> line.split("=")).filter(line -> line[0].equals("version")).findAny();
-            LOG.error("Version " + version.orElse(new String[]{"unknown","unknown"})[1]);
-            LOG.info(Strings.repeat("=", 75));
-        }
-        catch (IOException | IndexOutOfBoundsException e){
-            LOG.error("--> [error] impossible to read the version number " + e.getMessage());
+    public void executeParametersValues(){
+        if(read){
+            Properties props = Operations
+                    .readValues(properties.getProperty("confman.server.name"))
+                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .forApp(app)
+                    .version(code)
+                    .instance(code)
+                    .execute();
+
+            LOG.info("Read parameters values");
+            LOG.info(String.format("... code=[%s] label=[%s] app=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication()));
         }
     }
 
+    /**
+     * Operations for version
+     */
+    public void executeVersion(){
+        if(read){
+            ConfmanDto dto = Operations
+                    .readVersion(properties.getProperty("confman.server.name"))
+                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .forApp(app)
+                    .version(code)
+                    .execute();
+
+            LOG.info("Read version");
+            LOG.info(String.format("... code=[%s] label=[%s] app=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication()));
+        }
+    }
+
+    /**
+     * Operations for param
+     */
+    public void executeParam(){
+        if(read){
+            ConfmanDto dto = Operations
+                    .readParameter(properties.getProperty("confman.server.name"))
+                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .forApp(app)
+                    .code(code)
+                    .execute();
+
+            LOG.info("Read parameter");
+            LOG.info(String.format("... code=[%s] label=[%s] app=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication()));
+        }
+    }
+
+    /**
+     * Operations for instance
+     */
+    public void executeInstance(){
+        if(read){
+            ConfmanDto dto = Operations
+                    .readInstance(properties.getProperty("confman.server.name"))
+                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .forApp(app)
+                    .code(code)
+                    .env(env)
+                    .execute();
+
+            LOG.info("Read instance");
+            LOG.info(String.format("... code=[%s] label=[%s] app=[%s] env=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication(), dto.getCodeEnvironment()));
+        }
+    }
     /**
      * Help for user
      */
@@ -186,6 +272,7 @@ public class ConfmanCommand {
         LOG.info(" -a, --app                 : Application Code");
         LOG.info(" -e, --env                 : Environment Code");
         LOG.info(" -v, --version             : Version Code");
+        LOG.info(" -i, --instance            : Instance Code");
         LOG.info("");
         LOG.info("Example");
         LOG.info("=======");
