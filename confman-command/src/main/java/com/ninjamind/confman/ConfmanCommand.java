@@ -21,6 +21,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -163,11 +164,13 @@ public class ConfmanCommand {
                     .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
                     .forApp(app)
                     .version(code)
-                    .instance(code)
+                    .instance(instance)
                     .execute();
 
             LOG.info("Read parameters values");
-            LOG.info(String.format("... code=[%s] label=[%s] app=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication()));
+            for(Map.Entry<Object,Object> prop : props.entrySet()) {
+                LOG.info(String.format("... code=[%s] label=[%s] app=[%s] instance=[%s]", prop.getKey(), prop.getValue(), app, instance));
+            }
         }
     }
 
