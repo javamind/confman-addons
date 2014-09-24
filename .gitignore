@@ -5,3 +5,5 @@ build
 **/build
 **/target
 **/node_modules
+**/.tmp
+out
