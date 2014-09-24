@@ -2,4 +2,6 @@
 **/*.iml
 target
 build
-manager/build
+**/build
+**/target
+**/node_modules
