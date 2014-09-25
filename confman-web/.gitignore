@@ -1,6 +1,0 @@
-.gradle
-.idea
-*.iml
-target
-dist
-node_modules

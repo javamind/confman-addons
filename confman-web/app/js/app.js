@@ -37,7 +37,7 @@ confman.config(function ($routeProvider) {
 /**
  * Menu controller
  */
-confman.controller('AppCtrl', function($scope, $timeout, $materialSidenav) {
+confman.controller('AppCtrl', function($scope, $timeout, $materialSidenav, $http, constants) {
     var leftNav;
     $timeout(function() {
         leftNav = $materialSidenav('left');
@@ -59,6 +59,13 @@ confman.controller('AppCtrl', function($scope, $timeout, $materialSidenav) {
         }
         return false;
     };
+    $http.get(constants.urlserver + 'environment')
+        .success(function (data) {
+            $scope.errorUrl = "";
+        })
+        .error(function () {
+            $scope.errorUrl = "Impossible to dialog with confman server. Verify the server port in the config file [CONFMAN_PATH]/app/config.js";
+        });
 });
 
 /**
