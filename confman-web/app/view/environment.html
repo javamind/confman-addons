@@ -10,8 +10,8 @@
                 </div>
             </h4>
             <material-list>
-                <material-item ng-repeat="env in environments | orderBy:'code'" ng-dblClick="update(env)">
-                    <div class="material-tile-content">
+                <material-item ng-repeat="env in environments | orderBy:'code'" ng-dblClick="update(env)" ng-class="isSelected(env.id, entity.selected)" class="confman-material-item">
+                    <div class="material-tile-content" >
                         <h2>{{env.code}}</h2>
                         <p>{{env.label}}</p>
                     </div>

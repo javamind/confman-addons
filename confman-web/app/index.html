@@ -61,12 +61,11 @@
             <div class="material-display-flex material-flex menu_toolbox">
                 <!-- use up the third space so the button is on the right -->
             </div>
-
-            <button class="material-button " style="position: static; display: block;"
-                    ng-show="currentPage.actionbar"
-                    ng-repeat="act in currentPage.actionbar" ng-click="act.action()">
-                <img ng-src="/img/icon/{{act.icon}}.svg" style="width: 24px; height: 24px;"/>
-            </button>
+            <material-button class="material-button" style="position: static; display: block;"
+                             ng-show="currentPage.actionbar"
+                             ng-repeat="act in currentPage.actionbar" ng-click="act.action()">
+                <img ng-src="/img/icon/{{act.icon}}.svg" style="width: 24px; height: 24px;" />
+            </material-button>
         </div>
     </material-toolbar>
     <material-toolbar class="material-theme-grey" scroll-header condensed-height="60"

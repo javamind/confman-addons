@@ -83,6 +83,7 @@ angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, 
                         $scope.softwaresuites.splice(index, 1);
                     }
                     $scope.entity.content = null;
+                    $scope.entity.verb = null;
                 },
                 $scope.callbackKO);
         });

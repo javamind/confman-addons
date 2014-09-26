@@ -3,6 +3,7 @@
 @action_simple_color:#4285f4;
 @action_flash_color:#FFEB3B;
 @action_error:#f2dede;
+@action_selected:#eeeeee;
 
 body{
   min-height: 100%;
@@ -44,7 +45,13 @@ body{
   }
 }
 
-
+.confman-selected{
+  background-color: @action_selected;
+}
+.confman-material-item{
+  width: 100%;
+  padding-left: 15px;
+}
 
 .confman-image{
   text-align: center;
@@ -148,8 +155,6 @@ body{
   background-color: #eee;
   border-radius: 6px;
 }
-
-
 
 .confman-line-error{
   background-color:@action_error;

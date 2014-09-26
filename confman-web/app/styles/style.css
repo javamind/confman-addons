@@ -16,6 +16,10 @@ body {
   width: 100%;
   position: relative;
 }
+.confman-material-item{
+    width: 100%;
+    padding-left: 15px;
+}
 .confman-menu-title img {
   position: absolute;
   padding: 2px;
@@ -28,6 +32,12 @@ body {
   padding: 0px;
   margin: 0px;
   position: absolute;
+}
+.confman-selected {
+  background-color: #eeeeee;
+}
+.confman-material-item{
+  width: 100%;
 }
 .confman-image {
   text-align: center;

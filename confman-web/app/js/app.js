@@ -98,6 +98,9 @@ confman.run(function ($rootScope, translations) {
         }
         return ''
     };
+    $rootScope.isSelected = function(idElt, idSelected){
+        return idElt===idSelected ? 'confman-selected' : '';
+    };
 
     $rootScope.getI18n = function(key){
         return translations[key];

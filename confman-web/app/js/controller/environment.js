@@ -23,13 +23,15 @@ angular.module('confman').controller('environmentCtrl', function ($rootScope, $s
     $scope.update =  function (elt){
         $scope.entity = {
             verb : 'Update environment',
-            content : elt
+            content : elt,
+            selected : elt.id
         };
     };
     $scope.create =  function (){
         $scope.entity = {
             verb : 'Create environment',
-            content : {}
+            content : {},
+            selected : null
         };
     };
     $scope.delete =  function (elt, $event){
@@ -62,6 +64,7 @@ angular.module('confman').controller('environmentCtrl', function ($rootScope, $s
                         $scope.environments.splice(index, 1);
                     }
                     $scope.entity.content = null;
+                    $scope.entity.verb = null;
                 },
                 $scope.callbackKO);
         });
@@ -87,6 +90,7 @@ angular.module('confman').controller('environmentCtrl', function ($rootScope, $s
                         }
                         $scope.environments.push(data)
                         $scope.entity.content = null;
+                        $scope.entity.verb = null;
                     },
                     $scope.callbackKO);
         }
