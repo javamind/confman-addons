@@ -99,10 +99,29 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
 
         var callBackCreateInstance = function (data) {
             $scope.error = null;
+            data.active=true;
             if (!$scope.application.instances) {
                 $scope.application.instances = [];
             }
-            $scope.application.instances.push(data);
+            angular.forEach($scope.environments, function (env) {
+                if (data.idEnvironment === env.id) {
+                    data.codeEnvironment = env.code;
+                }
+            });
+            //We see if the cpde exist
+            var find = false;
+            angular.forEach($scope.application.instances,function(elt){
+                if(data.code===elt.code){
+                    elt.code=data.code;
+                    elt.label=data.label;
+                    elt.idEnvironment=data.idEnvironment;
+                    elt.active=true;
+                    find=true;
+                }
+            });
+            if(!find) {
+                $scope.application.instances.push(data);
+            }
         }
     };
 
@@ -138,10 +157,24 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
 
         var callBackCreateParameter = function (data) {
             $scope.error = null;
+            data.active=true;
             if (!$scope.application.parameters) {
                 $scope.application.parameters = [];
             }
-            $scope.application.parameters.push(data);
+            //We see if the cpde exist
+            var find = false;
+            angular.forEach($scope.application.parameters,function(elt){
+                if(data.code===elt.code){
+                    elt.code=data.code;
+                    elt.label=data.label;
+                    elt.type=data.type;
+                    elt.active=true;
+                    find=true;
+                }
+            });
+            if(!find) {
+                $scope.application.parameters.push(data);
+            }
         }
     };
 
@@ -176,17 +209,31 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
 
         var callBackCreateVersion = function (data) {
             $scope.error = null;
+            data.active=true;
             if (!$scope.application.versions) {
                 $scope.application.versions = [];
             }
-            $scope.application.versions.push(data);
+            //We see if the cpde exist
+            var find = false;
+            angular.forEach($scope.application.versions,function(elt){
+                if(data.code===elt.code){
+                    elt.code=data.code;
+                    elt.label=data.label;
+                    elt.active=true;
+                    find=true;
+                }
+            });
+            if(!find) {
+                $scope.application.versions.push(data);
+            }
         }
     };
 
     //Save application
     $scope.save = function(){
+
         if(!$scope.application.id){
-            Applicaton.save($scope.application, function (data){
+            Application.save($scope.application, function (data){
                 $scope.application = data;
                 $rootScope.error=null;
             }, $scope.callbackKO);

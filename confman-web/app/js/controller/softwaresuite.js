@@ -22,7 +22,8 @@ angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, 
     $scope.update =  function (elt){
         $scope.entity = {
             verb : 'Update software suite',
-            content : elt
+            content : elt,
+            selected : elt.id
         };
         $scope.hideEnv=true;
         //Load environments
@@ -110,6 +111,7 @@ angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, 
                     $scope.softwaresuites.push(data);
                     $scope.entity.content = data;
                     $scope.entity.verb = 'Update software suite';
+                    $scope.entity.selected = data.id;
                 },
                 $scope.callbackKO);
         }
@@ -131,6 +133,7 @@ angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, 
                 $scope.entity.content.environments = softenv;
             }
             $scope.entity.content.$update($scope.callbackOK, $scope.callbackKO);
+            $scope.entity.selected = $scope.entity.content.id;
         }
     };
 
