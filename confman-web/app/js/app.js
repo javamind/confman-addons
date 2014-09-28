@@ -16,7 +16,7 @@ confman.constant('constants', config);
  */
 confman.config(function ($routeProvider) {
     $routeProvider
-        .when('/', {templateUrl: 'main.html', controller:'MainCtrl'})
+        .when('/', {templateUrl: 'view/main.html', controller:'MainCtrl'})
         .when('/application/:id', {templateUrl: 'view/applicationdetail.html', controller:'applicationDetailCtrl'})
         .when('/config/search', {templateUrl: 'view/configsearch.html', controller:'configSearchCtrl'})
         .when('/config/create', {templateUrl: 'view/configcreate.html', controller:'configCreateCtrl'})
