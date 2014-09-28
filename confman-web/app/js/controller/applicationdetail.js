@@ -39,6 +39,7 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
     }
 
     //Modal who manage instances
+    //----------------------------
     $scope.manageInstance = function (instance) {
         $scope.modalInstance = $modal.open({
             templateUrl: 'modalAddInstanceToApplication.html',
@@ -100,6 +101,7 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
     };
 
     //Modal who manage paramters
+    //----------------------------
     $scope.manageParameter = function (parameter) {
         $scope.modalInstance = $modal.open({
             templateUrl: 'modalAddParamToApplication.html',
@@ -153,6 +155,7 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
     };
 
     //Modal who manage versions
+    //----------------------------
     $scope.manageVersion = function (version) {
         $scope.modalInstance = $modal.open({
             templateUrl: 'modalAddVersionToApplication.html',
@@ -204,6 +207,7 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
     };
 
     //Save application
+    //----------------------------
     $scope.save = function(){
 
         if(!$scope.application.id){
@@ -221,14 +225,44 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
             );
         }
     };
-    $scope.delete = function(){
-        alert('todo')
+
+    //Delete application
+    //----------------------------
+    $scope.delete = function(elt, $event){
+        var modalInstance = $modal.open({
+            templateUrl: 'modalConfirmDelete.html',
+            controller: function ($scope, $modalInstance, entity_todelete) {
+                $scope.entity_todelete = entity_todelete;
+                $scope.ok = function () {
+                    $modalInstance.close(true);
+                };
+                $scope.cancel = function () {
+                    $modalInstance.dismiss(false);
+                };
+            },
+            resolve: {
+                entity_todelete : function () {
+                    return 'application ' + elt.code;
+                }
+            }
+        });
+        //callback dans lequel on fait la suppression
+        modalInstance.result.then(function (response) {
+            $event.stopPropagation();
+            Application.delete(
+                elt,
+                function(data){
+                    $location.path('/application');
+                },
+                $scope.callbackKO);
+        });
     }
     $scope.cancel = function(){
         $location.path('/application');
     }
 
-    //DElete some dependencies
+    //Delete some dependencies
+    //----------------------------
     var deleteEntities = function($modal, entities, nameentities, callback){
         var modalInstance = $modal.open({
             templateUrl: 'modalConfirmDelete.html',
@@ -293,6 +327,8 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
             }
         })
     }
+
+
 });
 
 

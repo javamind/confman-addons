@@ -12,7 +12,7 @@
                             ng-disabled="form.$invalid">
                         <img src="../img/icon/ic_save_24px.svg" title="Save"/>
                     </button>
-                    <button class="btn btn-danger" ng-click="delete()" ng-show="application.id">
+                    <button class="btn btn-danger" ng-click="delete(application, $event)" ng-show="application.id">
                         <img src="../img/icon/ic_delete_24px.svg" title="Delete"/>
                     </button>
                     <button class="btn btn-default" ng-click="cancel()">
