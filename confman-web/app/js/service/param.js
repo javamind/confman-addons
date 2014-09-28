@@ -5,32 +5,32 @@ angular.module('confman')
         return {
             getTrackingVersionByIdApp: function (id, callback) {
                 $http
-                    .get(constants.urlserver + '/trackingversion/application/' + id)
+                    .get(constants.urlserver + 'trackingversion/application/' + id)
                     .success(callback);
             },
             getAppVersionByIdApp: function (id, callback) {
                 $http
-                    .get(constants.urlserver + '/applicationversion/application/' + id)
+                    .get(constants.urlserver + 'applicationversion/application/' + id)
                     .success(callback);
             },
             getAppByIdEnv: function (id, callback) {
                 $http
-                    .get(constants.urlserver + '/application/environment/' + id)
+                    .get(constants.urlserver + 'application/environment/' + id)
                     .success(callback);
             },
             getEnvByIdApp: function (id, callback) {
                 $http
-                    .get(constants.urlserver + '/environment/application/' + id)
+                    .get(constants.urlserver + 'environment/application/' + id)
                     .success(callback);
             },
             getInstanceByIdAppAndIdEnv: function (idApp, idEnv, callback) {
                 $http
-                    .get(constants.urlserver + '/instance/application/' + idApp + '/environment/' + idEnv)
+                    .get(constants.urlserver + 'instance/application/' + idApp + '/environment/' + idEnv)
                     .success(callback);
             },
             getParamValueByCriteria: function (filterCriteria, callbackOK, callbackKO) {
                 $http
-                    .post(constants.urlserver + '/parametervalue/search', filterCriteria)
+                    .post(constants.urlserver + 'parametervalue/search', filterCriteria)
                     .success(callbackOK)
                     .error(callbackKO);
             },
@@ -39,14 +39,13 @@ angular.module('confman')
                 filterCriteria1.nbEltPerPage = 99999;
                 filterCriteria2.page = 1;
                 filterCriteria2.nbEltPerPage = 99999;
-                filterCriteria2.nbEltPerPage = 99999;
 
                 $http
-                    .post(constants.urlserver + '/parametervalue/search', filterCriteria1)
+                    .post(constants.urlserver + 'parametervalue/search', filterCriteria1)
                     .success(function (datas) {
                         $scope.liste1 = datas.list;
                         $http
-                            .post(constants.urlserver + '/parametervalue/search', filterCriteria2)
+                            .post(constants.urlserver + 'parametervalue/search', filterCriteria2)
                             .success(function (data2s) {
                                 var finalList = [];
                                 $scope.liste2 = data2s.list;
@@ -61,7 +60,8 @@ angular.module('confman')
                                         elt1 : elt1,
                                         elt2 :  find ? eltBinded[0] : {},
                                         codeInstance : find ? eltBinded[0].codeInstance : elt1.codeInstance,
-                                        code : find ? eltBinded[0].code : elt1.code
+                                        code : find ? eltBinded[0].code : elt1.code,
+                                        difference : !find
                                     });
 
                                 });
@@ -76,7 +76,8 @@ angular.module('confman')
                                             elt1 : {},
                                             elt2: elt2,
                                             codeInstance: elt2.codeInstance,
-                                            code: elt2.code
+                                            code: elt2.code,
+                                            difference : true
                                         });
                                     }
                                 });

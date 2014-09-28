@@ -74,13 +74,15 @@
             </div>
         </form>
         <material-list>
-            <material-item ng-repeat="param in listecomp | orderBy:['codeInstance', 'code']">
+            <material-item ng-repeat="param in listecomp | orderBy:['codeInstance', 'code']" ng-class="setClassError(param.difference)">
                 <div class="material-tile-left">
                     <div class="confman-list-param-env" ng-show="param.elt1.code">{{param.elt1.codeEnvironment | uppercase | limitTo : 3}}</div>
+                    <div class="confman-list-param-empty" ng-hide="param.elt1.code">&nbsp;</div>
                 </div>
                 <div class="material-tile-content">
                     <div class="row">
                         <div class="col-xs-6">
+                            <h2 ng-hide="param.elt1.code">&nbsp;</h2>
                             <h2 ng-show="param.elt1.code">{{param.elt1.code}} : <b>{{param.elt1.label}}</b></h2>
 
                             <h3 ng-show="param.elt1.code">Application : {{param.elt1.codeApplication}} - tracking version : <div class="badge badge-version">{{param.elt1.codeTrackingVersion}}</div>
@@ -98,6 +100,7 @@
                             </div>
                         </div>
                         <div class="col-xs-5">
+                            <h2 ng-hide="param.elt2.code">&nbsp;</h2>
                             <h2 ng-show="param.elt2.code">{{param.elt2.code}} : <b>{{param.elt2.label}}</b></h2>
                             <h3 ng-show="param.elt2.code">Application : {{param.elt2.codeApplication}} - tracking version : <div class="badge badge-version">{{param.elt2.codeTrackingVersion}}</div>
                                 <span ng-show="param.elt2.codeInstance">- instance : <div class="badge badge-instance">{{param.elt2.codeInstance}}</div></span>
@@ -107,6 +110,8 @@
                 </div>
                 <div class="material-tile-right">
                     <div class="confman-list-param-env" ng-show="param.elt2.code">{{param.elt2.codeEnvironment | uppercase | limitTo : 3}}</div>
+                    <div class="confman-list-param-empty" ng-hide="param.elt2.code">&nbsp;</div>
+
                 </div>
             </material-item>
         </material-list>
