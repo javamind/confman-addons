@@ -2,7 +2,9 @@
 /**
  * Controller linked to the env list
  */
-angular.module('confman').controller('configCreateCtrl', function ($rootScope, $scope, $http, $modal, constants, Application, Params) {
+angular.module('confman').controller('configCreateCtrl', [
+    '$rootScope', '$scope', '$http', '$modal', 'constants', 'Application', 'Params',
+    function ($rootScope, $scope, $http, $modal, constants, Application, Params) {
     $rootScope.callbackOK();
 
     //Page definition
@@ -137,4 +139,4 @@ angular.module('confman').controller('configCreateCtrl', function ($rootScope, $
         }
         return '';
     }
-});
+}]);

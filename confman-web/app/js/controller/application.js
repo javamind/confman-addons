@@ -2,7 +2,8 @@
 /**
  * Controller linked to the env list
  */
-angular.module('confman').controller('applicationCtrl', function ($rootScope, $scope, $modal, $location, Application) {
+angular.module('confman').controller('applicationCtrl', ['$rootScope', '$scope', '$modal', '$location', 'Application',
+    function ($rootScope, $scope, $modal, $location, Application) {
     $rootScope.callbackOK();
 
     //Page definition
@@ -24,4 +25,4 @@ angular.module('confman').controller('applicationCtrl', function ($rootScope, $s
         $location.path('/application/' + 0);
     };
 
-});
+}]);

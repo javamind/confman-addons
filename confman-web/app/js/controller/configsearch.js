@@ -2,7 +2,7 @@
 /**
  * Controller linked to the env list
  */
-angular.module('confman').controller('configSearchCtrl', function ($rootScope, $scope, $http, constants, Environment, TableService, Params) {
+angular.module('confman').controller('configSearchCtrl', ['$rootScope','$scope','$http','constants','Environment','TableService','Params',function ($rootScope, $scope, $http, constants, Environment, TableService, Params) {
     $rootScope.callbackOK();
 
     //Page definition
@@ -94,4 +94,4 @@ angular.module('confman').controller('configSearchCtrl', function ($rootScope, $
             $scope.callbackKO
         );
     }
-});
+}]);

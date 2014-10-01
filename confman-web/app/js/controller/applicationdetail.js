@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('confman').controller('applicationDetailCtrl', function ($rootScope, $scope, $modal, $routeParams, $filter, Application, Environment, SoftwareSuite, Instance, $location) {
+angular.module('confman').controller('applicationDetailCtrl',
+    ['$rootScope', '$scope', '$modal', '$routeParams', '$filter', 'Application', 'Environment', 'SoftwareSuite', 'Instance', '$location',
+    function ($rootScope, $scope, $modal, $routeParams, $filter, Application, Environment, SoftwareSuite, Instance, $location) {
 
     //Page definition
     $rootScope.currentPage = {
@@ -342,7 +344,7 @@ angular.module('confman').controller('applicationDetailCtrl', function ($rootSco
     }
 
 
-});
+}]);
 
 
 

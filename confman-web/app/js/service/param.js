@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('confman')
-    .factory('Params', function Params($http, constants) {
+    .factory('Params', ['$http', 'constants', function Params($http, constants) {
         return {
             getTrackingVersionByIdApp: function (id, callback) {
                 $http
@@ -88,4 +88,4 @@ angular.module('confman')
 
             }
         }
-    });
+    }]);

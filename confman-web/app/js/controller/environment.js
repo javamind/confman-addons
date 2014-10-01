@@ -3,7 +3,7 @@
 /**
  * Controller linked to the env list
  */
-angular.module('confman').controller('environmentCtrl', function ($rootScope, $scope, $modal, Environment) {
+angular.module('confman').controller('environmentCtrl',['$rootScope', '$scope', '$modal', 'Environment',  function ($rootScope, $scope, $modal, Environment) {
     $rootScope.callbackOK();
 
     //Page definition
@@ -99,6 +99,6 @@ angular.module('confman').controller('environmentCtrl', function ($rootScope, $s
         }
     };
 
-})
+}])
 
 

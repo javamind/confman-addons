@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('confman')
-    .factory('TableService', function TableService() {
+    .factory('TableService', [function TableService() {
         return {
             /**
              * Determination du numero de page max en fonction du nb d'enreg
@@ -51,4 +51,4 @@ angular.module('confman')
                 return tab;
             }
         };
-    });
+    }]);

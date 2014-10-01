@@ -71,7 +71,7 @@ confman.controller('AppCtrl', function($scope, $timeout, $materialSidenav, $http
 /**
  * Commons callback
  */
-confman.run(function ($rootScope, translations) {
+confman.run(function ($rootScope) {
     $rootScope.callbackOK = function(){
         $rootScope.error=null;
     };
@@ -100,10 +100,6 @@ confman.run(function ($rootScope, translations) {
     };
     $rootScope.isSelected = function(idElt, idSelected){
         return idElt===idSelected ? 'confman-selected' : '';
-    };
-
-    $rootScope.getI18n = function(key){
-        return translations[key];
     };
 
 })

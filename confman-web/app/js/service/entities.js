@@ -9,27 +9,27 @@ var restActions = {
 };
 
 angular.module('confman')
-    .factory('Environment', function Environment($resource, constants) {
+    .factory('Environment', ['$resource', 'constants', function Environment($resource, constants) {
         return $resource(constants.urlserver + 'environment/:id', { id: '@_id' },restActions);
-    })
-    .factory('SoftwareSuite', function SoftwareSuite($resource, constants) {
+    }])
+    .factory('SoftwareSuite', ['$resource', 'constants', function SoftwareSuite($resource, constants) {
         return $resource(constants.urlserver + 'softwaresuite/:id', { id: '@_id' },restActions);
-    })
-    .factory('Application', function Application($resource, constants) {
+    }])
+    .factory('Application', ['$resource', 'constants', function Application($resource, constants) {
         return $resource(constants.urlserver + 'application/:id', { id: '@_id' },restActions);
-    })
-    .factory('ApplicationVersion', function ApplicationVersion($resource, constants) {
+    }])
+    .factory('ApplicationVersion', ['$resource', 'constants', function ApplicationVersion($resource, constants) {
         return $resource(constants.urlserver + 'applicationversion/:id', { id: '@_id' },restActions);
-    })
-    .factory('TrackingVersion', function TrackingVersion($resource, constants) {
+    }])
+    .factory('TrackingVersion', ['$resource', 'constants', function TrackingVersion($resource, constants) {
         return $resource(constants.urlserver + 'trackingversion/:id', { id: '@_id' },restActions);
-    })
-    .factory('Instance', function Instance($resource, constants) {
+    }])
+    .factory('Instance', ['$resource', 'constants', function Instance($resource, constants) {
         return $resource(constants.urlserver + 'instance/:id', { id: '@_id' },restActions);
-    })
-    .factory('Parameter', function Parameter($resource, constants) {
+    }])
+    .factory('Parameter', ['$resource', 'constants', function Parameter($resource, constants) {
         return $resource(constants.urlserver + 'parameter/:id', { id: '@_id' },restActions);
-    })
-    .factory('ParamaterGroupment', function ParamaterGroupment($resource, constants) {
+    }])
+    .factory('ParamaterGroupment', ['$resource', 'constants', function ParamaterGroupment($resource, constants) {
         return $resource(constants.urlserver + 'parametergroupment/:id', { id: '@_id' },restActions);
-    });
+    }]);

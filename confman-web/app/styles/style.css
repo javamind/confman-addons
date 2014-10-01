@@ -23,7 +23,6 @@ body {
   background-color: #4285f4;
   border-radius: 32px;
 }
-
 .confman-menu-title h2 {
   left: 64px;
   padding: 0px;
@@ -43,7 +42,6 @@ body {
 .confman-image img {
   max-width: 100%;
 }
-
 .confman-btn {
   display: inline-block;
   text-align: right;
@@ -132,16 +130,15 @@ body {
   background-color: #cccccc;
   color: #000000;
 }
-.confman-list-param-empty{
-. border-radius: 32px;
-    width: 40px;
-    height: 40px;
-    left: 3px;
-    font-weight: bold;
-    padding-top: 10px;
-    text-align: center;
-    background-color: #ffffff;
-    color: #000000;
+.confman-list-param-empty {
+  border-radius: 32px;
+  width: 40px;
+  height: 40px;
+  left: 3px;
+  font-weight: bold;
+  padding-top: 10px;
+  text-align: center;
+  color: #000000;
 }
 .confman-input-param-env {
   color: #000000;

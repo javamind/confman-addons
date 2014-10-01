@@ -2,7 +2,9 @@
 /**
  * Controller linked to the env list
  */
-angular.module('confman').controller('configCompareCtrl', function ($rootScope, $scope, $http, constants, Application, Params) {
+angular.module('confman').controller('configCompareCtrl', [
+    '$rootScope', '$scope', '$http', 'constants', 'Application', 'Params',
+    function ($rootScope, $scope, $http, constants, Application, Params) {
     $rootScope.callbackOK();
 
     //Page definition
@@ -48,4 +50,4 @@ angular.module('confman').controller('configCompareCtrl', function ($rootScope, 
             }
         );
     };
-});
+}]);

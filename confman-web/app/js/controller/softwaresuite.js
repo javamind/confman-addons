@@ -2,7 +2,8 @@
 /**
  * Controller linked to the application's groupment list
  */
-angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, $scope, $http, $modal, SoftwareSuite, Environment, constants) {
+angular.module('confman').controller('softwaresuiteCtrl', ['$rootScope', '$scope', '$http', '$modal' , 'SoftwareSuite',  'Environment', 'constants',
+    function ($rootScope, $scope, $http, $modal, SoftwareSuite, Environment, constants) {
     $rootScope.callbackOK();
 
     //Page definition
@@ -16,7 +17,6 @@ angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, 
 
     //Load applicationgroupments
     $scope.softwaresuites = SoftwareSuite.query();
-
 
     //Actions
     $scope.update =  function (elt){
@@ -137,6 +137,6 @@ angular.module('confman').controller('softwaresuiteCtrl', function ($rootScope, 
         }
     };
 
-})
+}])
 
 
