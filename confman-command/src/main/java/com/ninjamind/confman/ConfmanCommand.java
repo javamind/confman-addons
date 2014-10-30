@@ -191,6 +191,7 @@ public class ConfmanCommand {
      */
     public void executeVersion(){
         if(read){
+            LOG.info(String.format("Read version for app=[%s] and code=[%s]", app, code));
             ConfmanDto dto = Operations
                     .readVersion(server)
                     .onPort(port)
@@ -198,8 +199,7 @@ public class ConfmanCommand {
                     .version(code)
                     .execute();
 
-            LOG.info("Read version");
-            LOG.info(String.format("... code=[%s] label=[%s] app=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication()));
+            LOG.info(String.format("... label=[%s]", dto==null ? "not found control yours params" : dto.getLabel()));
         }
         else if(create){
             Operations.addParameter(server)
@@ -216,15 +216,14 @@ public class ConfmanCommand {
      */
     public void executeParam(){
         if(read){
+            LOG.info(String.format("Read parameter for app=[%s] and code=[%s]", app, code));
             ConfmanDto dto = Operations
                     .readParameter(server)
                     .onPort(port)
                     .forApp(app)
                     .code(code)
                     .execute();
-
-            LOG.info("Read parameter");
-            LOG.info(String.format("... code=[%s] label=[%s] app=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication()));
+            LOG.info(String.format("... label=[%s]", dto==null ? "not found control yours params" : dto.getLabel()));
         }
     }
 
@@ -233,6 +232,7 @@ public class ConfmanCommand {
      */
     public void executeInstance(){
         if(read){
+            LOG.info(String.format("Read instance for app=[%s] and code=[%s] and env=[%s]", app, code, env));
             ConfmanDto dto = Operations
                     .readInstance(server)
                     .onPort(port)
@@ -240,9 +240,7 @@ public class ConfmanCommand {
                     .code(code)
                     .env(env)
                     .execute();
-
-            LOG.info("Read instance");
-            LOG.info(String.format("... code=[%s] label=[%s] app=[%s] env=[%s]", dto.getCode(), dto.getLabel(), dto.getCodeApplication(), dto.getCodeEnvironment()));
+            LOG.info(String.format("... label=[%s]", dto==null ? "not found control yours params" : dto.getLabel()));
         }
     }
 
@@ -277,18 +275,18 @@ public class ConfmanCommand {
         LOG.info("");
         LOG.info("For object type [param] the verbs available are [read, create, update]");
         LOG.info(" -a, --app                 : Application Code");
-        LOG.info(" -c, --code                : Parameter Code");
+        LOG.info(" -cd, --code                : Parameter Code");
         LOG.info(" -l, --label               : Parameter Label (not required for read)");
         LOG.info(" -t, --typparam            : INSTANCE or APPLICATION (not required for read)");
         LOG.info("");
         LOG.info("For object type [instance] the verbs available are [read, create, update]");
         LOG.info(" -a, --app                 : Application Code");
-        LOG.info(" -c, --code                : Instance Code");
+        LOG.info(" -cd, --code                : Instance Code");
         LOG.info(" -l, --label               : Instance Label (not required for read)");
         LOG.info("");
         LOG.info("For object type [version] the verbs available are [read, create, update]");
         LOG.info(" -a, --app                 : Application Code");
-        LOG.info(" -c, --code                : Version Code");
+        LOG.info(" -cd, --code                : Version Code");
         LOG.info(" -l, --label               : Version Label (not required for read)");
         LOG.info(" -g, --regenerate          : If the value is true create a new set of parameters values (a tracking version)");
         LOG.info("");
