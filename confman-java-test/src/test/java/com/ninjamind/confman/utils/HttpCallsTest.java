@@ -3,6 +3,7 @@ package com.ninjamind.confman.utils;
 import com.google.gson.Gson;
 import com.ninjamind.confman.domain.ParameterValue;
 import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.utils.rest.HttpCallException;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
@@ -32,12 +33,12 @@ public class HttpCallsTest {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
                 routes -> routes
-                        .get("/confman/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
-                        .post("/confman/paramvalue", (context) -> {
+                        .get("/api/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
+                        .post("/api/paramvalue", (context) -> {
                             ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"),ConfmanDto.class);
                             return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
-                        .put("/confman/paramvalue", (context) -> {
+                        .put("/api/paramvalue", (context) -> {
                             ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"), ConfmanDto.class);
                             return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
@@ -60,7 +61,7 @@ public class HttpCallsTest {
     @Test
     public void httpGetShouldReceiveJson(){
         //We try a get call
-        String result = HttpCalls.get(String.format("http://localhost:%d/confman/paramvalue/testappelconfman", webServer.port()));
+        String result = HttpCalls.get(String.format("http://localhost:%d/api/paramvalue/testappelconfman", webServer.port()));
         assertThat(result).isNotEmpty();
         assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("testappelconfman");
     }
@@ -69,9 +70,11 @@ public class HttpCallsTest {
     @Test
     public void httpGetShouldNotReceiveJsonWhenUrlInvalid(){
         //We try a get call
-        String result = HttpCalls.get(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()));
-        //Http fluent return a HTML page with an error
-        assertThat(result).isNotEmpty().contains("Page not found");
+        try {
+            HttpCalls.get(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()));
+        } catch (HttpCallException e) {
+            assertThat(e).hasMessageStartingWith("Erreur HTTP 404 (Not found)");
+        }
     }
 
     @Test
@@ -90,7 +93,7 @@ public class HttpCallsTest {
         Map<String, String> map = new HashMap<>();
         map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
         //We try a get call
-        String result = HttpCalls.post(String.format("http://localhost:%d/confman/paramvalue", webServer.port()), map);
+        String result = HttpCalls.post(String.format("http://localhost:%d/api/paramvalue", webServer.port()), map);
         assertThat(result).isNotEmpty();
         assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
     }
@@ -99,9 +102,12 @@ public class HttpCallsTest {
     @Test
     public void httpPostShouldNotReceiveJsonWhenUrlInvalid(){
         //We try a get call
-        String result = HttpCalls.post(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
-        //Http fluent return a HTML page with an error
-        assertThat(result).isNotEmpty().contains("Page not found");
+        try {
+            String result = HttpCalls.post(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
+        } catch (HttpCallException e) {
+            assertThat(e).hasMessageStartingWith("Erreur HTTP 404 (Not found)");
+        }
+
     }
 
     @Test
@@ -120,7 +126,7 @@ public class HttpCallsTest {
         Map<String, String> map = new HashMap<>();
         map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
         //We try a get call
-        String result = HttpCalls.put(String.format("http://localhost:%d/confman/paramvalue", webServer.port()), map);
+        String result = HttpCalls.put(String.format("http://localhost:%d/api/paramvalue", webServer.port()), map);
         assertThat(result).isNotEmpty();
         assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
     }
@@ -129,9 +135,12 @@ public class HttpCallsTest {
     @Test
     public void httpPutShouldNotReceiveJsonWhenUrlInvalid() {
         //We try a get call
-        String result = HttpCalls.put(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
-        //Http fluent return a HTML page with an error
-        assertThat(result).isNotEmpty().contains("Page not found");
+        try {
+            String result = HttpCalls.put(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
+        } catch (HttpCallException e) {
+            assertThat(e).hasMessageStartingWith("Erreur HTTP 404 (Not found)");
+        }
+
     }
 
     @Test

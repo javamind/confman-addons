@@ -29,7 +29,7 @@ public class ConfmanReadParameterValuesTest {
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/confman/paramvalue/APP/version/1.0.0/env/dev",
+                routes -> routes.get("/api/paramvalue/APP/version/1.0.0/env/dev",
                         Arrays.asList(
                                 new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("jdbc:oracle:thin:@oradev:1521:ORA"),
                                 new ConfmanDto().setId(21L).setCode("server.name").setLabel("WP450").setCodeInstance("WP450"))

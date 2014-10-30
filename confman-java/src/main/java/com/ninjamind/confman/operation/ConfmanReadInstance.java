@@ -31,7 +31,7 @@ public class ConfmanReadInstance extends AbstractConfmanOperation<ConfmanReadIns
     @Override
     protected ConfmanDto executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/instance/%s/app/%s/env/%s", server, port, instanceCode, appCode, envCode);
+        String url = String.format("http://%s:%s/api/instance/%s/app/%s/env/%s", server, port, instanceCode, appCode, envCode);
 
         //Confman is called
         String json = HttpCalls.get(url);

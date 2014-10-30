@@ -51,7 +51,7 @@ public class ConfmanReadParameterValues extends AbstractConfmanOperation<Confman
     @Override
     protected Properties executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/paramvalue/%s/version/%s/env/%s",server, port, appCode, versionNumber, envCode);
+        String url = String.format("http://%s:%s/api/paramvalue/%s/version/%s/env/%s",server, port, appCode, versionNumber, envCode);
 
         //Confman is called
         String json = HttpCalls.get(url);

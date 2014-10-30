@@ -1,6 +1,12 @@
 package com.ninjamind.confman.operation;
 
+import com.google.gson.Gson;
+import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Call cofman to add a parameter to an application
@@ -29,8 +35,29 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
      */
     @Override
     protected Void executeAction() {
-        //URL construction
-        String url = String.format("http://%s:%s/confman/param/%s/app/%s", server, port, paramCode, appCode);
+        //Parameters preparation
+        //Note : this project is in Java6 we can't use diamond
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(
+                "confmanDto",
+                new Gson().toJson(
+                        new ConfmanDto()
+                                .setCodeApplication(appCode)
+                                .setCodeParameter(paramCode)
+                                .setLabel(label).setTypeParameter(typeParameter)
+                )
+        );
+
+        String url = String.format("http://%s:%s/api/param", server, port);
+
+        //Confman is called
+        String json = HttpCalls.post(url, map);
+
+        if (json != null && !json.isEmpty()) {
+            //We use Gson to read the instances values in the flow
+            Gson gson = new Gson();
+            gson.fromJson(json, ConfmanDto.class);
+        }
         return null;
     }
 

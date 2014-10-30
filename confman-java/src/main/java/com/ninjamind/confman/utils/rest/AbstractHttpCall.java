@@ -33,6 +33,30 @@ public abstract class AbstractHttpCall {
             HttpRequestBase request = getRequest(urlToCall);
             setParameters(request, args);
             HttpResponse response = client.execute(request);
+
+            int status = response.getStatusLine().getStatusCode();
+            String message = "Erreur HTTP %d (%s) on request %s";
+            String messageDetail = null;
+            switch(status){
+                case 400:
+                    messageDetail = "Bad Request";
+                    break;
+                case 401:
+                    messageDetail = "Unauthorized";
+                    break;
+                case 403:
+                    messageDetail = "Forbidden";
+                    break;
+                case 404:
+                    messageDetail = "Not found";
+                    break;
+                default:
+                    messageDetail = "See HTTP code signification";
+            }
+            if(status>299){
+                throw new HttpCallException(String.format(message, status, messageDetail, urlToCall));
+            }
+           // if(response.getStatusLine() sdfsf a faure pour verifier validite)
             br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String l = null;
             while ((l = br.readLine()) != null) {

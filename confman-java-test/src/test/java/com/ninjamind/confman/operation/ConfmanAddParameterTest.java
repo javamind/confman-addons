@@ -20,21 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfmanAddParameterTest {
     private static WebServer webServer;
 
-    /**
-     * A confman server is launch before the tests
-     */
-
-    @BeforeClass
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        webServer = new WebServer(
-                routes -> routes.get("/confman/paramvalue/APP/version/1.0.0/env/dev",
-                        Arrays.asList(
-                                new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("jdbc:oracle:thin:@oradev:1521:ORA"),
-                                new ConfmanDto().setId(21L).setCode("server.name").setLabel("WP450").setCodeInstance("WP450"))
-                )
-        ).startOnRandomPort();
-    }
 
     /**
      * At the end the server is stopped
@@ -66,16 +51,6 @@ public class ConfmanAddParameterTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenLabelNull() {
         ConfmanAddParameter.from("server").onPort(8080).forApp("APP").code("jdbc.url").type("APPLICATION").execute();
-    }
-
-    @Test
-    public void shouldAddParameterOfTypeApplication() {
-        ConfmanAddParameter.from("localhost").onPort(webServer.port()).forApp("APP").code("jdbc.url").label("URL JDBC").execute();
-    }
-
-    @Test
-    public void shouldAddParameterOfTypeInstance() {
-        ConfmanAddParameter.from("localhost").onPort(webServer.port()).forApp("APP").code("server.name").type("INSTANCE").label("Server name").execute();
     }
 
 }
