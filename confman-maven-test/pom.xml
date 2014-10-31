@@ -13,12 +13,16 @@
 
     <build>
         <plugins>
+            <!-- pre-integration-test launch server -->
             <plugin>
                 <artifactId>confman-maven-plugin</artifactId>
                 <groupId>com.ninjamind</groupId>
                 <version>1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
+                        <!-- The phase must not be declared. Here it's only to be able to launch a server before  the test -->
+                        <phase>integration-test</phase>
+                        <!-- Several goal are available -->
                         <goals>
                             <goal>help</goal>
                             <goal>display-properties</goal>
@@ -34,6 +38,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- post-integration-test stop server -->
         </plugins>
     </build>
 </project>

@@ -32,12 +32,12 @@ public class HttpCallsTest {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
                 routes -> routes
-                        .get("/confman/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
-                        .post("/confman/paramvalue", (context) -> {
+                        .get("/api/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
+                        .post("/api/paramvalue", (context) -> {
                             ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"),ConfmanDto.class);
                             return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
-                        .put("/confman/paramvalue", (context) -> {
+                        .put("/api/paramvalue", (context) -> {
                             ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"), ConfmanDto.class);
                             return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
@@ -60,7 +60,7 @@ public class HttpCallsTest {
     @Test
     public void httpGetShouldReceiveJson(){
         //We try a get call
-        String result = HttpCalls.get(String.format("http://localhost:%d/confman/paramvalue/testappelconfman", webServer.port()));
+        String result = HttpCalls.get(String.format("http://localhost:%d/api/paramvalue/testappelconfman", webServer.port()));
         assertThat(result).isNotEmpty();
         assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("testappelconfman");
     }
@@ -90,7 +90,7 @@ public class HttpCallsTest {
         Map<String, String> map = new HashMap<>();
         map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
         //We try a get call
-        String result = HttpCalls.post(String.format("http://localhost:%d/confman/paramvalue", webServer.port()), map);
+        String result = HttpCalls.post(String.format("http://localhost:%d/api/paramvalue", webServer.port()), map);
         assertThat(result).isNotEmpty();
         assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
     }
@@ -120,7 +120,7 @@ public class HttpCallsTest {
         Map<String, String> map = new HashMap<>();
         map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
         //We try a get call
-        String result = HttpCalls.put(String.format("http://localhost:%d/confman/paramvalue", webServer.port()), map);
+        String result = HttpCalls.put(String.format("http://localhost:%d/api/paramvalue", webServer.port()), map);
         assertThat(result).isNotEmpty();
         assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
     }

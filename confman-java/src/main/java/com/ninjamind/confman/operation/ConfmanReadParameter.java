@@ -29,7 +29,7 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
     @Override
     protected ConfmanDto executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/param/%s/app/%s", server, port, paramCode, appCode);
+        String url = String.format("http://%s:%s/api/param/%s/app/%s", server, port, paramCode, appCode);
 
         //Confman is called
         String json = HttpCalls.get(url);

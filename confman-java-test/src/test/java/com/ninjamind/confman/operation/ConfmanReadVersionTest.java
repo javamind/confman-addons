@@ -25,7 +25,7 @@ public class ConfmanReadVersionTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/confman/version/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("1.0.0").setLabel("my version").setVersion("1.0.0-track1"))
+                routes -> routes.get("/api/version/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("1.0.0").setLabel("my version").setVersion("1.0.0-track1"))
         ).startOnRandomPort();
     }
 

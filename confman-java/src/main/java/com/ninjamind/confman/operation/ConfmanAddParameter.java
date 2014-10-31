@@ -30,7 +30,7 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
     @Override
     protected Void executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/param/%s/app/%s", server, port, paramCode, appCode);
+        String url = String.format("http://%s:%s/api/param/%s/app/%s", server, port, paramCode, appCode);
         return null;
     }
 

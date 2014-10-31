@@ -29,7 +29,7 @@ public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVers
     @Override
     protected ConfmanDto executeAction() {
         //URL construction
-        String url = String.format("http://%s:%s/confman/version/%s/app/%s", server, port, versionCode, appCode);
+        String url = String.format("http://%s:%s/api/version/%s/app/%s", server, port, versionCode, appCode);
 
         //Confman is called
         String json = HttpCalls.get(url);

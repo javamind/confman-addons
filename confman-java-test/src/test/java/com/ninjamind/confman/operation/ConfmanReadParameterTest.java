@@ -25,7 +25,7 @@ public class ConfmanReadParameterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/confman/param/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("JDBC URL"))
+                routes -> routes.get("/api/param/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("JDBC URL"))
         ).startOnRandomPort();
     }
 

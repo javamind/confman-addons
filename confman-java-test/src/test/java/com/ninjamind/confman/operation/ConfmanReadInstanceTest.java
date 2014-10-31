@@ -25,7 +25,7 @@ public class ConfmanReadInstanceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/confman/instance/:code/app/:app/env/:env", (context, code, app, env) -> new ConfmanDto().setId(17L).setCode("WP450").setLabel("My instance"))
+                routes -> routes.get("/api/instance/:code/app/:app/env/:env", (context, code, app, env) -> new ConfmanDto().setId(17L).setCode("WP450").setLabel("My instance"))
         ).startOnRandomPort();
     }
 
