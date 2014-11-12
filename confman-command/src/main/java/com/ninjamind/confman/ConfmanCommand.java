@@ -74,6 +74,15 @@ public class ConfmanCommand {
     private String instance;
 
     /**
+     * This data is not give as an argument but read in a conf file
+     */
+    private String server;
+    /**
+     * This data is not give as an argument but read in a conf file
+     */
+    private Integer port;
+
+    /**
      * Logger
      */
     private static Logger LOG = LogManager.getLogger();
@@ -131,6 +140,9 @@ public class ConfmanCommand {
      * Print the version of the command line
      */
     public void execute(){
+        port = Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080"));
+        server = properties.getProperty("confman.server.name");
+
         if(read || update || create){
             //The operation is specific for an object type
             switch (objectType){
@@ -161,7 +173,7 @@ public class ConfmanCommand {
         if(read){
             Properties props = Operations
                     .readValues(properties.getProperty("confman.server.name"))
-                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .onPort(port)
                     .forApp(app)
                     .version(code)
                     .instance(instance)
@@ -181,13 +193,21 @@ public class ConfmanCommand {
         if(read){
             LOG.info(String.format("Read version for app=[%s] and code=[%s]", app, code));
             ConfmanDto dto = Operations
-                    .readVersion(properties.getProperty("confman.server.name"))
-                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .readVersion(server)
+                    .onPort(port)
                     .forApp(app)
                     .version(code)
                     .execute();
 
             LOG.info(String.format("... label=[%s]", dto==null ? "not found control yours params" : dto.getLabel()));
+        }
+        else if(create){
+            Operations.addParameter(server)
+                    .onPort(port)
+                    .code(code)
+                    .forApp(app)
+                    .label(label)
+                    .type(typparam);
         }
     }
 
@@ -198,8 +218,8 @@ public class ConfmanCommand {
         if(read){
             LOG.info(String.format("Read parameter for app=[%s] and code=[%s]", app, code));
             ConfmanDto dto = Operations
-                    .readParameter(properties.getProperty("confman.server.name"))
-                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .readParameter(server)
+                    .onPort(port)
                     .forApp(app)
                     .code(code)
                     .execute();
@@ -214,8 +234,8 @@ public class ConfmanCommand {
         if(read){
             LOG.info(String.format("Read instance for app=[%s] and code=[%s] and env=[%s]", app, code, env));
             ConfmanDto dto = Operations
-                    .readInstance(properties.getProperty("confman.server.name"))
-                    .onPort(Integer.valueOf(Objects.firstNonNull(properties.getProperty("confman.server.port"), "8080")))
+                    .readInstance(server)
+                    .onPort(port)
                     .forApp(app)
                     .code(code)
                     .env(env)
@@ -223,6 +243,7 @@ public class ConfmanCommand {
             LOG.info(String.format("... label=[%s]", dto==null ? "not found control yours params" : dto.getLabel()));
         }
     }
+
     /**
      * Help for user
      */

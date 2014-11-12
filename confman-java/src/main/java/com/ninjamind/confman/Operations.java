@@ -1,9 +1,6 @@
 package com.ninjamind.confman;
 
-import com.ninjamind.confman.operation.ConfmanReadInstance;
-import com.ninjamind.confman.operation.ConfmanReadParameter;
-import com.ninjamind.confman.operation.ConfmanReadParameterValues;
-import com.ninjamind.confman.operation.ConfmanReadVersion;
+import com.ninjamind.confman.operation.*;
 
 /**
  * @author Guillaume EHRET
@@ -17,6 +14,15 @@ public class Operations {
      */
     public static ConfmanReadParameter.Builder readParameter(String server){
         return ConfmanReadParameter.from(server);
+    }
+
+    /**
+     * Add a parameter.
+     * @param server
+     * @return instance of the operation buider
+     */
+    public static ConfmanAddParameter.Builder addParameter(String server){
+        return ConfmanAddParameter.from(server);
     }
 
     /**

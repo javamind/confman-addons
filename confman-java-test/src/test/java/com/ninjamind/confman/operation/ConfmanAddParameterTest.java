@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfmanAddParameterTest {
     private static WebServer webServer;
 
+<<<<<<< HEAD
     /**
      * A confman server is launch before the tests
      */
@@ -35,6 +36,8 @@ public class ConfmanAddParameterTest {
                 )
         ).startOnRandomPort();
     }
+=======
+>>>>>>> 75d9483f9738dd0683f0d7b88c3bfd8ef999389d
 
     /**
      * At the end the server is stopped
@@ -66,16 +69,6 @@ public class ConfmanAddParameterTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenLabelNull() {
         ConfmanAddParameter.from("server").onPort(8080).forApp("APP").code("jdbc.url").type("APPLICATION").execute();
-    }
-
-    @Test
-    public void shouldAddParameterOfTypeApplication() {
-        ConfmanAddParameter.from("localhost").onPort(webServer.port()).forApp("APP").code("jdbc.url").label("URL JDBC").execute();
-    }
-
-    @Test
-    public void shouldAddParameterOfTypeInstance() {
-        ConfmanAddParameter.from("localhost").onPort(webServer.port()).forApp("APP").code("server.name").type("INSTANCE").label("Server name").execute();
     }
 
 }

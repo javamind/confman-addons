@@ -3,6 +3,7 @@ package com.ninjamind.confman.utils;
 import com.google.gson.Gson;
 import com.ninjamind.confman.domain.ParameterValue;
 import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.utils.rest.HttpCallException;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
@@ -69,9 +70,11 @@ public class HttpCallsTest {
     @Test
     public void httpGetShouldNotReceiveJsonWhenUrlInvalid(){
         //We try a get call
-        String result = HttpCalls.get(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()));
-        //Http fluent return a HTML page with an error
-        assertThat(result).isNotEmpty().contains("Page not found");
+        try {
+            HttpCalls.get(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()));
+        } catch (HttpCallException e) {
+            assertThat(e).hasMessageStartingWith("Erreur HTTP 404 (Not found)");
+        }
     }
 
     @Test
@@ -99,9 +102,12 @@ public class HttpCallsTest {
     @Test
     public void httpPostShouldNotReceiveJsonWhenUrlInvalid(){
         //We try a get call
-        String result = HttpCalls.post(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
-        //Http fluent return a HTML page with an error
-        assertThat(result).isNotEmpty().contains("Page not found");
+        try {
+            String result = HttpCalls.post(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
+        } catch (HttpCallException e) {
+            assertThat(e).hasMessageStartingWith("Erreur HTTP 404 (Not found)");
+        }
+
     }
 
     @Test
@@ -129,9 +135,12 @@ public class HttpCallsTest {
     @Test
     public void httpPutShouldNotReceiveJsonWhenUrlInvalid() {
         //We try a get call
-        String result = HttpCalls.put(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
-        //Http fluent return a HTML page with an error
-        assertThat(result).isNotEmpty().contains("Page not found");
+        try {
+            String result = HttpCalls.put(String.format("http://localhost:%d/cozerzerzer/testappelconfman", webServer.port()), null);
+        } catch (HttpCallException e) {
+            assertThat(e).hasMessageStartingWith("Erreur HTTP 404 (Not found)");
+        }
+
     }
 
     @Test
