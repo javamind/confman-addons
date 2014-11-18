@@ -9,7 +9,7 @@
     <version>0.1.0-beta.1</version>
     <packaging>pom</packaging>
 
-    <name>Confman Addons</name>
+    <name>Confman Addons (parent)</name>
     <description>The maven core project for all addons to use confman</description>
     <url>https://github.com/javamind/confman-addons</url>
 

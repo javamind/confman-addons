@@ -35,10 +35,9 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
      */
     @Override
     protected Void executeAction() {
-<<<<<<< HEAD
         //URL construction
         String url = String.format("http://%s:%s/api/param/%s/app/%s", server, port, paramCode, appCode);
-=======
+
         //Parameters preparation
         //Note : this project is in Java6 we can't use diamond
         Map<String, String> map = new HashMap<String, String>();
@@ -52,8 +51,6 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
                 )
         );
 
-        String url = String.format("http://%s:%s/api/param", server, port);
-
         //Confman is called
         String json = HttpCalls.post(url, map);
 
@@ -62,7 +59,6 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
             Gson gson = new Gson();
             gson.fromJson(json, ConfmanDto.class);
         }
->>>>>>> 75d9483f9738dd0683f0d7b88c3bfd8ef999389d
         return null;
     }
 
