@@ -5,11 +5,14 @@
     <parent>
         <artifactId>confman-addons</artifactId>
         <groupId>com.ninjamind</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1.0-beta.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>confman-command</artifactId>
+
+    <name>Confman Addons (command line)</name>
+    <description>Command line to to use Confman</description>
 
     <!-- The command line is a standalone application. We use Java 8-->
     <properties>
@@ -21,7 +24,7 @@
         <dependency>
             <artifactId>confman-java</artifactId>
             <groupId>com.ninjamind</groupId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1.0-beta.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -77,4 +80,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build></project>
+    </build>
+</project>

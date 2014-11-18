@@ -5,11 +5,14 @@
     <parent>
         <artifactId>confman-addons</artifactId>
         <groupId>com.ninjamind</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1.0-beta.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>confman-java-test</artifactId>
+
+    <name>Confman Addons (Test API)</name>
+    <description>Test API Java</description>
 
     <!-- In the integration test we start an embeded Confman Server. Confman server is Java 8 application -->
     <properties>
@@ -21,7 +24,7 @@
         <dependency>
             <artifactId>confman-java</artifactId>
             <groupId>com.ninjamind</groupId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1.0-beta.1</version>
         </dependency>
 
         <!-- Test dependencies -->
