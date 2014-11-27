@@ -1,5 +1,6 @@
 package com.ninjamind.maven.plugin;
 
+import com.ninjamind.confman.dto.ConfmanDto;
 import com.ninjamind.maven.plugin.util.ConfmanFileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -9,7 +10,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 
 /**
@@ -51,19 +51,29 @@ public class WriteConfmanPropertiesMojo extends AbstractReaderConfmanMojo {
     private String propertiesprefix;
 
     /**
+     * Suffix of the properties file (default is "").
+     * <pre>
+     *     filter-dev-myserver1.properties
+     * </pre>
+     */
+    @Parameter(name = "propertiessuffix")
+    private String propertiessuffix;
+
+
+    /**
      * @param properties
      * @throws org.apache.maven.plugin.MojoExecutionException
      */
     @Override
-    protected void executeBatch(Properties properties) throws MojoExecutionException {
+    protected void executeBatch(ConfmanDto[] properties) throws MojoExecutionException {
         ConfmanFileUtils.writePropertiesInFile(
                 propertiespath,
                 propertiesprefix,
+                propertiessuffix,
                 env,
-                instance,
                 getLog(),
                 encoding!=null ? Charset.forName(encoding) : StandardCharsets.UTF_8,
-                formatProperties(properties, "%s=%s")
+                formatProperties(properties, "#%s\n%s=%s")
         );
     }
 }

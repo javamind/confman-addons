@@ -28,15 +28,20 @@ public class ConfmanFileUtils {
      */
     public static void writePropertiesInFile(String propertiespath,
                                String propertiesprefix,
+                               String propertiessuffix,
                                String env,
-                               String instance,
                                Log logger,
                                Charset encoding,
                                List<String> properties) throws MojoExecutionException{
         BufferedWriter writer = null;
         try {
+            String suffix  = "";
+            if(propertiessuffix!=null){
+                suffix = "-" + propertiessuffix;
+            }
+
             //We see if the file exist
-            Path path = Paths.get(propertiespath, String.format("%s%s%s.properties", propertiesprefix, env, instance != null ? "-" + instance : ""));
+            Path path = Paths.get(propertiespath, String.format("%s%s%s.properties",propertiesprefix ,env, suffix));
 
             File file = path.toFile();
             if(file==null){

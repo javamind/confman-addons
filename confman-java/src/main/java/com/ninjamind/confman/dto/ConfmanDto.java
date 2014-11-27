@@ -29,6 +29,7 @@ public class ConfmanDto {
     protected String codeApplication;
     protected String value;
     protected String codeParameter;
+    protected String labelParameter;
     protected String version;
     protected String typeParameter;
     protected boolean generateWithLastParameterValuesSet;
@@ -127,6 +128,16 @@ public class ConfmanDto {
         return this;
     }
 
+    public String getLabelParameter() {
+        return labelParameter;
+
+    }
+
+    public ConfmanDto setLabelParameter(String labelParameter) {
+        this.labelParameter = labelParameter;
+        return this;
+    }
+
     public boolean isGenerateWithLastParameterValuesSet() {
         return generateWithLastParameterValuesSet;
     }
@@ -135,4 +146,6 @@ public class ConfmanDto {
         this.generateWithLastParameterValuesSet = generateWithLastParameterValuesSet;
         return this;
     }
+
+
 }

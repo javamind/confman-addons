@@ -171,7 +171,7 @@ public class ConfmanCommand {
      */
     public void executeParametersValues(){
         if(read){
-            Properties props = Operations
+            ConfmanDto[] props = Operations
                     .readValues(properties.getProperty("confman.server.name"))
                     .onPort(port)
                     .forApp(app)
@@ -180,8 +180,8 @@ public class ConfmanCommand {
                     .execute();
 
             LOG.info("Read parameters values");
-            for(Map.Entry<Object,Object> prop : props.entrySet()) {
-                LOG.info(String.format("... code=[%s] label=[%s] app=[%s] instance=[%s]", prop.getKey(), prop.getValue(), app, instance));
+            for(ConfmanDto prop : props) {
+                LOG.info(String.format("... code=[%s] label=[%s] app=[%s] instance=[%s]", prop.getCode(), prop.getValue(), app, instance));
             }
         }
     }

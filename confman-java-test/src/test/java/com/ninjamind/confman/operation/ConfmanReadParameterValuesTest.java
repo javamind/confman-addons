@@ -65,25 +65,18 @@ public class ConfmanReadParameterValuesTest {
 
     @Test
     public void shouldFindPropertiesWhenReadProperties(){
-        Properties properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").execute();
+        ConfmanDto[] properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").execute();
 
-        assertThat(properties).isNotEmpty();
-        //An application parameter
-        assertThat(properties.get("jdbc.url")).isEqualTo("jdbc:oracle:thin:@oradev:1521:ORA");
-        //as the instance is not specified, the instance is like suffix because we can have several instances per environments
-        assertThat(properties.get("server.name.WP450")).isEqualTo("WP450");
-        assertThat(properties.get("server.name")).isNull();
+        assertThat(properties).isNotEmpty().hasSize(2);
+        assertThat(properties).extracting("code").containsExactly("jdbc.url", "server.name");
     }
 
     @Test
     public void shouldFindPropertiesWhenReadPropertiesByEnvAndInstance(){
-        Properties properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").instance("WP450").execute();
+        ConfmanDto[] properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").instance("WP450").execute();
 
         assertThat(properties).isNotEmpty();
-        //An application parameter
-        assertThat(properties.get("jdbc.url")).isEqualTo("jdbc:oracle:thin:@oradev:1521:ORA");
-        //An instance parameter
-        assertThat(properties.get("server.name")).isEqualTo("WP450");
+        assertThat(properties).extracting("code").containsExactly("jdbc.url", "server.name");
 
     }
 

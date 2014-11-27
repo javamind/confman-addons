@@ -1,5 +1,6 @@
 package com.ninjamind.maven.plugin;
 
+import com.ninjamind.confman.dto.ConfmanDto;
 import com.ninjamind.confman.operation.ConfmanReadParameterValues;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -74,10 +75,10 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
         try{
             getLog().info(String.format("   Confman call on the URL http://%s:%s", server, port));
             getLog().info(String.format("   App=[%s] Version=[%s] Env=[%s] instance=[%s]", app, version, env, instance));
-            Properties properties = ConfmanReadParameterValues.from(server).onPort(port).forApp(app).version(version).env(env).instance(instance).execute();
-            getLog().info(String.format("   %d properties read", properties.size()));
+            ConfmanDto[] properties = ConfmanReadParameterValues.from(server).onPort(port).forApp(app).version(version).env(env).instance(instance).execute();
+            getLog().info(String.format("   %d properties read", properties!=null ? properties.length : 0));
 
-            if(properties.size()>0){
+            if(properties!=null && properties.length>0){
                 //Properties are added to the project properties
                 executeBatch(properties);
             }
@@ -96,7 +97,7 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
      * @param properties
      * @throws MojoExecutionException
      */
-    protected abstract void executeBatch(Properties properties) throws MojoExecutionException;
+    protected abstract void executeBatch(ConfmanDto[] properties) throws MojoExecutionException;
 
 
     /**
@@ -107,17 +108,27 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
      * @param properties
      * @throws MojoExecutionException
      */
-    protected List<String> formatProperties(Properties properties, String scheme) {
-        List<String> props = new ArrayList<String>(properties.size());
-        for(Map.Entry<Object, Object> property : properties.entrySet()){
-            props.add(String.format(scheme, property.getKey(), property.getValue()));
-        }
-        Collections.sort(props, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
+    protected List<String> formatProperties(ConfmanDto[] properties, String scheme) {
+        List<String> props = new ArrayList<String>();
+        if(properties!=null) {
+            Arrays.sort(properties, new Comparator<ConfmanDto>() {
+                @Override
+                public int compare(ConfmanDto c1, ConfmanDto c2) {
+                    if (c1 == c2) {
+                        return 0;
+                    } else if (c1 == null) {
+                        return -1;
+                    } else if (c2 == null) {
+                        return 1;
+                    }
+                    return c1.getCode().compareTo(c2.getCode());
+                }
+            });
+            for (ConfmanDto property : properties) {
+                props.add(String.format(scheme, property.getLabelParameter(), property.getCode(), property.getLabel()));
             }
-        });
+
+        }
         return props;
     }
 }

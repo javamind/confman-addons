@@ -5,13 +5,14 @@ import com.ninjamind.confman.dto.ConfmanDto;
 import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
+import java.util.List;
 import java.util.Properties;
 
 /**
  * Call cofman to read parameters values
  * @author Guillaume EHRET
  */
-public class ConfmanReadParameterValues extends AbstractConfmanOperation<ConfmanReadParameterValues, Properties>{
+public class ConfmanReadParameterValues extends AbstractConfmanOperation<ConfmanReadParameterValues, ConfmanDto[]>{
 
     protected String appCode;
     protected String versionNumber;
@@ -49,32 +50,19 @@ public class ConfmanReadParameterValues extends AbstractConfmanOperation<Confman
      * @return all parameters in a {@link java.util.Properties}
      */
     @Override
-    protected Properties executeAction() {
+    protected ConfmanDto[] executeAction() {
         //URL construction
         String url = String.format("http://%s:%s/api/paramvalue/%s/version/%s/env/%s",server, port, appCode, versionNumber, envCode);
 
         //Confman is called
         String json = HttpCalls.get(url);
 
-        Properties properties = new Properties();
         if(json!=null && !json.isEmpty()){
             //We use Gson to read the parameters values in the flow
             Gson gson = new Gson();
-            ConfmanDto[] parameters = gson.fromJson(json, ConfmanDto[].class);
-
-            for(ConfmanDto param : parameters){
-                //A parameter can be linked ton an instance or not. If we ask a filter we keep the application parameters
-                //and the parameters of the instance passed by the method arguments
-                if(instanceCode!=null && (param.getCodeInstance()==null || param.getCodeInstance().equals(instanceCode))){
-                    properties.put(param.getCode(), param.getLabel());
-                }
-                else if(instanceCode==null){
-                    //If no filter is asked the parameters are suffixed by the instance code
-                    properties.put(param.getCode().concat(param.getCodeInstance()!=null ? "." + param.getCodeInstance() : ""), param.getLabel());
-                }
-            }
+            return gson.fromJson(json, ConfmanDto[].class);
         }
-        return properties;
+        return null;
     }
 
     @Override
@@ -161,7 +149,7 @@ public class ConfmanReadParameterValues extends AbstractConfmanOperation<Confman
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public Properties execute() {
+        public ConfmanDto[] execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
             return new ConfmanReadParameterValues(this).execute();

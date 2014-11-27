@@ -49,6 +49,7 @@ public class DisplayConfmanHelpMojo extends AbstractMojo {
         getLog().info("     -> [encoding] : default is '${project.build.sourceEncoding}'");
         getLog().info("     -> [propertiespath] : default is '${basedir}/src/main/filters/'");
         getLog().info("     -> [propertiesprefix] : default is 'filter-'");
+        getLog().info("     -> [propertiessuffix] : default is ''");
         getLog().info("-----------------------------------------------------------------------");
 
 

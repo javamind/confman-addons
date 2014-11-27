@@ -5,7 +5,7 @@
     <parent>
         <artifactId>confman-addons</artifactId>
         <groupId>com.ninjamind</groupId>
-        <version>0.1.0-beta.1</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,7 +20,7 @@
             <plugin>
                 <artifactId>confman-maven-plugin</artifactId>
                 <groupId>com.ninjamind</groupId>
-                <version>0.1.0-beta.1</version>
+                <version>1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <!-- The phase must not be declared. Here it's only to be able to launch a server before  the test -->

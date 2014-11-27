@@ -1,5 +1,6 @@
 package com.ninjamind.maven.plugin;
 
+import com.ninjamind.confman.dto.ConfmanDto;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -33,8 +34,8 @@ public class DisplayConfmanPropertiesMojo extends AbstractReaderConfmanMojo {
      * @throws MojoExecutionException
      */
     @Override
-    protected void executeBatch(Properties properties) throws MojoExecutionException {
-        for(String elt : formatProperties(properties, "    - %s : %s ")){
+    protected void executeBatch(ConfmanDto[] properties) throws MojoExecutionException {
+        for(String elt : formatProperties(properties, "    #%s\n    - %s : %s ")){
             getLog().info(elt);
         }
     }
