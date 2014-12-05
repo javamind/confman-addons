@@ -51,7 +51,14 @@ public class DisplayConfmanHelpMojo extends AbstractMojo {
         getLog().info("     -> [propertiesprefix] : default is 'filter-'");
         getLog().info("     -> [propertiessuffix] : default is ''");
         getLog().info("-----------------------------------------------------------------------");
-
+        getLog().info("   confman-read-properties : to load the parameters value in the maven context");
+        getLog().info("     -> server : server where Confman is installed");
+        getLog().info("     -> [port] : server port (default is 8080)");
+        getLog().info("     -> app : application code defined in  Confman");
+        getLog().info("     -> env : your install is for one environment. Tou have to give the environment code");
+        getLog().info("     -> version : all yours versions have to be defined in Confman. The number help to find the values");
+        getLog().info("     -> [instance] : if you have several instance for one environment");
+        getLog().info("-----------------------------------------------------------------------");
 
     }
 }

@@ -30,6 +30,7 @@
                             <goal>help</goal>
                             <goal>display-properties</goal>
                             <goal>write-properties</goal>
+                            <goal>read-properties</goal>
                         </goals>
                         <configuration>
                             <server>localhost</server>
