@@ -1,6 +1,6 @@
 package com.ninjamind.maven.plugin;
 
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
 import com.ninjamind.confman.operation.ConfmanReadParameterValues;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -9,7 +9,10 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -75,7 +78,7 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
         try{
             getLog().info(String.format("   Confman call on the URL http://%s:%s", server, port));
             getLog().info(String.format("   App=[%s] Version=[%s] Env=[%s] instance=[%s]", app, version, env, instance));
-            ConfmanDto[] properties = ConfmanReadParameterValues.from(server).onPort(port).forApp(app).version(version).env(env).instance(instance).execute();
+            ParameterValueConfmanDto[] properties = ConfmanReadParameterValues.from(server).onPort(port).forApp(app).version(version).env(env).instance(instance).execute();
             getLog().info(String.format("   %d properties read", properties!=null ? properties.length : 0));
 
             if(properties!=null && properties.length>0){
@@ -97,7 +100,7 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
      * @param properties
      * @throws MojoExecutionException
      */
-    protected abstract void executeBatch(ConfmanDto[] properties) throws MojoExecutionException;
+    protected abstract void executeBatch(ParameterValueConfmanDto[] properties) throws MojoExecutionException;
 
 
     /**
@@ -108,12 +111,12 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
      * @param properties
      * @throws MojoExecutionException
      */
-    protected List<String> formatProperties(ConfmanDto[] properties, String scheme) {
+    protected List<String> formatProperties(ParameterValueConfmanDto[] properties, String scheme) {
         List<String> props = new ArrayList<String>();
         if(properties!=null) {
-            Arrays.sort(properties, new Comparator<ConfmanDto>() {
+            Arrays.sort(properties, new Comparator<ParameterValueConfmanDto>() {
                 @Override
-                public int compare(ConfmanDto c1, ConfmanDto c2) {
+                public int compare(ParameterValueConfmanDto c1, ParameterValueConfmanDto c2) {
                     if (c1 == c2) {
                         return 0;
                     } else if (c1 == null) {
@@ -124,7 +127,7 @@ public abstract class AbstractReaderConfmanMojo extends AbstractMojo {
                     return c1.getCode().compareTo(c2.getCode());
                 }
             });
-            for (ConfmanDto property : properties) {
+            for (ParameterValueConfmanDto property : properties) {
                 props.add(String.format(scheme, property.getLabelParameter(), property.getCode(), property.getLabel()));
             }
 

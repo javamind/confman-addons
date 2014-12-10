@@ -6,7 +6,10 @@ import com.beust.jcommander.Parameters;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.gson.JsonSyntaxException;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.InstanceConfmanDto;
+import com.ninjamind.confman.dto.ParameterConfmanDto;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
+import com.ninjamind.confman.dto.VersionConfmanDto;
 import com.ninjamind.confman.validator.ObjectTypeValidator;
 import com.ninjamind.confman.validator.ParameterTypeValidator;
 import org.apache.logging.log4j.LogManager;
@@ -171,7 +174,7 @@ public class ConfmanCommand {
      */
     public void executeParametersValues(){
         if(read){
-            ConfmanDto[] props = Operations
+            ParameterValueConfmanDto[] props = Operations
                     .readValues(properties.getProperty("confman.server.name"))
                     .onPort(port)
                     .forApp(app)
@@ -180,8 +183,8 @@ public class ConfmanCommand {
                     .execute();
 
             LOG.info("Read parameters values");
-            for(ConfmanDto prop : props) {
-                LOG.info(String.format("... code=[%s] label=[%s] app=[%s] instance=[%s]", prop.getCode(), prop.getValue(), app, instance));
+            for(ParameterValueConfmanDto prop : props) {
+                LOG.info(String.format("... code=[%s] label=[%s] app=[%s] instance=[%s]", prop.getCode(), prop.getLabel(), app, instance));
             }
         }
     }
@@ -192,7 +195,7 @@ public class ConfmanCommand {
     public void executeVersion(){
         if(read){
             LOG.info(String.format("Read version for app=[%s] and code=[%s]", app, code));
-            ConfmanDto dto = Operations
+            VersionConfmanDto dto = Operations
                     .readVersion(server)
                     .onPort(port)
                     .forApp(app)
@@ -217,7 +220,7 @@ public class ConfmanCommand {
     public void executeParam(){
         if(read){
             LOG.info(String.format("Read parameter for app=[%s] and code=[%s]", app, code));
-            ConfmanDto dto = Operations
+            ParameterConfmanDto dto = Operations
                     .readParameter(server)
                     .onPort(port)
                     .forApp(app)
@@ -233,7 +236,7 @@ public class ConfmanCommand {
     public void executeInstance(){
         if(read){
             LOG.info(String.format("Read instance for app=[%s] and code=[%s] and env=[%s]", app, code, env));
-            ConfmanDto dto = Operations
+            InstanceConfmanDto dto = Operations
                     .readInstance(server)
                     .onPort(port)
                     .forApp(app)

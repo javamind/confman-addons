@@ -1,20 +1,15 @@
 package com.ninjamind.maven.plugin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import com.ninjamind.confman.dto.ConfmanDto;
-import org.apache.maven.plugin.AbstractMojo;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
+
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
  * The read-project-properties goal reads confman parameters values and stores
@@ -35,12 +30,12 @@ public class ReadConfmanPropertiesMojo extends AbstractReaderConfmanMojo {
 
 
     @Override
-    protected void executeBatch(ConfmanDto[] properties) throws MojoExecutionException {
+    protected void executeBatch(ParameterValueConfmanDto[] properties) throws MojoExecutionException {
         Properties projectProperties = project.getProperties();
 
         //We see if properties used environment variables and we ahd our values
         boolean useEnvVariables = false;
-        for(ConfmanDto confmanDto : properties){
+        for(ParameterValueConfmanDto confmanDto : properties){
             if(confmanDto.getLabel()!=null) {
                 if (confmanDto.getLabel().indexOf("${env.") != -1) {
                     useEnvVariables = true;

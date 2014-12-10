@@ -1,7 +1,6 @@
 package com.ninjamind.confman.operation;
 
-import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.operation.ConfmanReadParameterValues;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
@@ -9,7 +8,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,8 +29,8 @@ public class ConfmanReadParameterValuesTest {
         webServer = new WebServer(
                 routes -> routes.get("/api/paramvalue/APP/version/1.0.0/env/dev",
                         Arrays.asList(
-                                new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("jdbc:oracle:thin:@oradev:1521:ORA"),
-                                new ConfmanDto().setId(21L).setCode("server.name").setLabel("WP450").setCodeInstance("WP450"))
+                                new ParameterValueConfmanDto().setId(17L).setCode("jdbc.url").setLabel("jdbc:oracle:thin:@oradev:1521:ORA"),
+                                new ParameterValueConfmanDto().setId(21L).setCode("server.name").setLabel("WP450").setCodeInstance("WP450"))
                         )
         ).startOnRandomPort();
     }
@@ -65,7 +63,7 @@ public class ConfmanReadParameterValuesTest {
 
     @Test
     public void shouldFindPropertiesWhenReadProperties(){
-        ConfmanDto[] properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").execute();
+        ParameterValueConfmanDto[] properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").execute();
 
         assertThat(properties).isNotEmpty().hasSize(2);
         assertThat(properties).extracting("code").containsExactly("jdbc.url", "server.name");
@@ -73,7 +71,7 @@ public class ConfmanReadParameterValuesTest {
 
     @Test
     public void shouldFindPropertiesWhenReadPropertiesByEnvAndInstance(){
-        ConfmanDto[] properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").instance("WP450").execute();
+        ParameterValueConfmanDto[] properties = ConfmanReadParameterValues.from("localhost").onPort(webServer.port()).forApp("APP").env("dev").version("1.0.0").instance("WP450").execute();
 
         assertThat(properties).isNotEmpty();
         assertThat(properties).extracting("code").containsExactly("jdbc.url", "server.name");

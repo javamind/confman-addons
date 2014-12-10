@@ -1,7 +1,6 @@
 package com.ninjamind.confman.operation;
 
-import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.operation.ConfmanReadParameter;
+import com.ninjamind.confman.dto.ParameterConfmanDto;
 import net.codestory.http.WebServer;
 import org.assertj.core.api.Assertions;
 import org.mockito.MockitoAnnotations;
@@ -25,7 +24,8 @@ public class ConfmanReadParameterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/api/param/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("JDBC URL"))
+                routes -> routes.get("/api/param/:code/app/:app",
+                        (context, code, app) -> new ParameterConfmanDto().setId(17L).setCode("jdbc.url").setLabel("JDBC URL"))
         ).startOnRandomPort();
     }
 

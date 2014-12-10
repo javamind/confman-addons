@@ -1,7 +1,7 @@
 package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.ParameterConfmanDto;
 import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
@@ -44,10 +44,11 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
         map.put(
                 "confmanDto",
                 new Gson().toJson(
-                        new ConfmanDto()
+                        new ParameterConfmanDto()
                                 .setCodeApplication(appCode)
-                                .setCodeParameter(paramCode)
-                                .setLabel(label).setTypeParameter(typeParameter)
+                                .setCode(paramCode)
+                                .setLabel(label)
+                                .setType(typeParameter)
                 )
         );
 
@@ -57,7 +58,7 @@ public class ConfmanAddParameter extends AbstractConfmanOperation<ConfmanAddPara
         if (json != null && !json.isEmpty()) {
             //We use Gson to read the instances values in the flow
             Gson gson = new Gson();
-            gson.fromJson(json, ConfmanDto.class);
+            gson.fromJson(json, ParameterConfmanDto.class);
         }
         return null;
     }

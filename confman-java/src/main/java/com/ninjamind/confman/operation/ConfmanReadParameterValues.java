@@ -1,18 +1,15 @@
 package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
 import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
-
-import java.util.List;
-import java.util.Properties;
 
 /**
  * Call cofman to read parameters values
  * @author Guillaume EHRET
  */
-public class ConfmanReadParameterValues extends AbstractConfmanOperation<ConfmanReadParameterValues, ConfmanDto[]>{
+public class ConfmanReadParameterValues extends AbstractConfmanOperation<ConfmanReadParameterValues, ParameterValueConfmanDto[]>{
 
     protected String appCode;
     protected String versionNumber;
@@ -50,7 +47,7 @@ public class ConfmanReadParameterValues extends AbstractConfmanOperation<Confman
      * @return all parameters in a {@link java.util.Properties}
      */
     @Override
-    protected ConfmanDto[] executeAction() {
+    protected ParameterValueConfmanDto[] executeAction() {
         //URL construction
         String url = String.format("http://%s:%s/api/paramvalue/%s/version/%s/env/%s",server, port, appCode, versionNumber, envCode);
 
@@ -60,7 +57,7 @@ public class ConfmanReadParameterValues extends AbstractConfmanOperation<Confman
         if(json!=null && !json.isEmpty()){
             //We use Gson to read the parameters values in the flow
             Gson gson = new Gson();
-            return gson.fromJson(json, ConfmanDto[].class);
+            return gson.fromJson(json, ParameterValueConfmanDto[].class);
         }
         return null;
     }
@@ -149,7 +146,7 @@ public class ConfmanReadParameterValues extends AbstractConfmanOperation<Confman
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public ConfmanDto[] execute() {
+        public ParameterValueConfmanDto[] execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
             return new ConfmanReadParameterValues(this).execute();

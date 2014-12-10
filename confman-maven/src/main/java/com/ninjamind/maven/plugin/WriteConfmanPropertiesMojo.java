@@ -1,6 +1,6 @@
 package com.ninjamind.maven.plugin;
 
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
 import com.ninjamind.maven.plugin.util.ConfmanFileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -65,7 +65,7 @@ public class WriteConfmanPropertiesMojo extends AbstractReaderConfmanMojo {
      * @throws org.apache.maven.plugin.MojoExecutionException
      */
     @Override
-    protected void executeBatch(ConfmanDto[] properties) throws MojoExecutionException {
+    protected void executeBatch(ParameterValueConfmanDto[] properties) throws MojoExecutionException {
         ConfmanFileUtils.writePropertiesInFile(
                 propertiespath,
                 propertiesprefix,

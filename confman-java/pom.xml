@@ -13,19 +13,29 @@
 
     <name>Confman Addons (API)</name>
     <description>API Java to to use Confman</description>
-
+    <properties>
+        <gson.version>2.3</gson.version>
+        <http.client.version>4.3.5</http.client.version>
+    </properties>
 
     <dependencies>
+        <!-- Confman -->
+        <dependency>
+            <groupId>com.ninjamind</groupId>
+            <artifactId>confman-commons</artifactId>
+            <version>${confman.server.version}</version>
+        </dependency>
+
         <!-- Parsing Json -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.3</version>
+            <version>${gson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.5</version>
+            <version>${http.client.version}</version>
         </dependency>
 
         <!-- Test dependencies -->

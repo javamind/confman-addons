@@ -1,8 +1,8 @@
 package com.ninjamind.confman.utils;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.domain.ParameterValue;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.ParameterConfmanDto;
+import com.ninjamind.confman.dto.ParameterValueConfmanDto;
 import com.ninjamind.confman.utils.rest.HttpCallException;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
@@ -33,14 +33,14 @@ public class HttpCallsTest {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
                 routes -> routes
-                        .get("/api/paramvalue/:test", (context, test) -> new ParameterValue().setId(1L).setCode("test").setLabel(test))
+                        .get("/api/paramvalue/:test", (context, test) -> new ParameterValueConfmanDto().setId(1L).setCode("test").setLabel(test))
                         .post("/api/paramvalue", (context) -> {
-                            ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"),ConfmanDto.class);
-                            return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
+                            ParameterValueConfmanDto dto = new Gson().fromJson(context.get("paramvalue"),ParameterValueConfmanDto.class);
+                            return new ParameterValueConfmanDto().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
                         .put("/api/paramvalue", (context) -> {
-                            ConfmanDto dto = new Gson().fromJson(context.get("paramvalue"), ConfmanDto.class);
-                            return new ParameterValue().setId(1L).setCode("test").setLabel(dto.getLabel());
+                            ParameterValueConfmanDto dto = new Gson().fromJson(context.get("paramvalue"), ParameterValueConfmanDto.class);
+                            return new ParameterValueConfmanDto().setId(1L).setCode("test").setLabel(dto.getLabel());
                         })
         ).startOnRandomPort();
     }
@@ -63,7 +63,7 @@ public class HttpCallsTest {
         //We try a get call
         String result = HttpCalls.get(String.format("http://localhost:%d/api/paramvalue/testappelconfman", webServer.port()));
         assertThat(result).isNotEmpty();
-        assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("testappelconfman");
+        assertThat(new Gson().fromJson(result, ParameterValueConfmanDto.class).getLabel()).isEqualTo("testappelconfman");
     }
 
 
@@ -91,11 +91,11 @@ public class HttpCallsTest {
     @Test
     public void httpPostShouldReceiveJson(){
         Map<String, String> map = new HashMap<>();
-        map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
+        map.put("paramvalue", new Gson().toJson(new ParameterValueConfmanDto().setLabel("MonLabel")));
         //We try a get call
         String result = HttpCalls.post(String.format("http://localhost:%d/api/paramvalue", webServer.port()), map);
         assertThat(result).isNotEmpty();
-        assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
+        assertThat(new Gson().fromJson(result, ParameterValueConfmanDto.class).getLabel()).isEqualTo("MonLabel");
     }
 
 
@@ -124,11 +124,11 @@ public class HttpCallsTest {
     @Test
     public void httpPutShouldReceiveJson() {
         Map<String, String> map = new HashMap<>();
-        map.put("paramvalue", new Gson().toJson(new ConfmanDto().setLabel("MonLabel")));
+        map.put("paramvalue", new Gson().toJson(new ParameterConfmanDto().setLabel("MonLabel")));
         //We try a get call
         String result = HttpCalls.put(String.format("http://localhost:%d/api/paramvalue", webServer.port()), map);
         assertThat(result).isNotEmpty();
-        assertThat(new Gson().fromJson(result, ParameterValue.class).getLabel()).isEqualTo("MonLabel");
+        assertThat(new Gson().fromJson(result, ParameterValueConfmanDto.class).getLabel()).isEqualTo("MonLabel");
     }
 
 

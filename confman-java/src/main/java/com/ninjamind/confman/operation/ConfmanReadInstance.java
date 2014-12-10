@@ -1,7 +1,7 @@
 package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.InstanceConfmanDto;
 import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
@@ -10,7 +10,7 @@ import com.ninjamind.confman.utils.Preconditions;
  *
  * @author Guillaume EHRET
  */
-public class ConfmanReadInstance extends AbstractConfmanOperation<ConfmanReadInstance, ConfmanDto> {
+public class ConfmanReadInstance extends AbstractConfmanOperation<ConfmanReadInstance, InstanceConfmanDto> {
 
     protected String appCode;
     protected String instanceCode;
@@ -29,7 +29,7 @@ public class ConfmanReadInstance extends AbstractConfmanOperation<ConfmanReadIns
      * @return
      */
     @Override
-    protected ConfmanDto executeAction() {
+    protected InstanceConfmanDto executeAction() {
         //URL construction
         String url = String.format("http://%s:%s/api/instance/%s/app/%s/env/%s", server, port, instanceCode, appCode, envCode);
 
@@ -38,7 +38,7 @@ public class ConfmanReadInstance extends AbstractConfmanOperation<ConfmanReadIns
         if (json != null && !json.isEmpty()) {
             //We use Gson to read the instances values in the flow
             Gson gson = new Gson();
-            return gson.fromJson(json, ConfmanDto.class);
+            return gson.fromJson(json, InstanceConfmanDto.class);
         }
         return null;
     }
@@ -122,7 +122,7 @@ public class ConfmanReadInstance extends AbstractConfmanOperation<ConfmanReadIns
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public ConfmanDto execute() {
+        public InstanceConfmanDto execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
             return new ConfmanReadInstance(this).execute();

@@ -1,7 +1,7 @@
 package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.VersionConfmanDto;
 import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
@@ -10,7 +10,7 @@ import com.ninjamind.confman.utils.Preconditions;
  *
  * @author Guillaume EHRET
  */
-public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVersion, ConfmanDto> {
+public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVersion, VersionConfmanDto> {
 
     protected String appCode;
     protected String versionCode;
@@ -27,7 +27,7 @@ public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVers
      * @return
      */
     @Override
-    protected ConfmanDto executeAction() {
+    protected VersionConfmanDto executeAction() {
         //URL construction
         String url = String.format("http://%s:%s/api/version/%s/app/%s", server, port, versionCode, appCode);
 
@@ -36,7 +36,7 @@ public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVers
         if (json != null && !json.isEmpty()) {
             //We use Gson to read the instances values in the flow
             Gson gson = new Gson();
-            return gson.fromJson(json, ConfmanDto.class);
+            return gson.fromJson(json, VersionConfmanDto.class);
         }
         return null;
     }
@@ -106,7 +106,7 @@ public class ConfmanReadVersion extends AbstractConfmanOperation<ConfmanReadVers
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public ConfmanDto execute() {
+        public VersionConfmanDto execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
             return new ConfmanReadVersion(this).execute();

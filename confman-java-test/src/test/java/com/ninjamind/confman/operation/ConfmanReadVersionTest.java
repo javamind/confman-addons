@@ -1,7 +1,6 @@
 package com.ninjamind.confman.operation;
 
-import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.operation.ConfmanReadVersion;
+import com.ninjamind.confman.dto.VersionConfmanDto;
 import net.codestory.http.WebServer;
 import org.assertj.core.api.Assertions;
 import org.mockito.MockitoAnnotations;
@@ -25,7 +24,8 @@ public class ConfmanReadVersionTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/api/version/:code/app/:app", (context, code, app) -> new ConfmanDto().setId(17L).setCode("1.0.0").setLabel("my version").setVersion("1.0.0-track1"))
+                routes -> routes.get("/api/version/:code/app/:app",
+                        (context, code, app) -> new VersionConfmanDto().setId(17L).setCode("1.0.0").setLabel("my version").setCodeTrackingversion("1.0.0-track1"))
         ).startOnRandomPort();
     }
 

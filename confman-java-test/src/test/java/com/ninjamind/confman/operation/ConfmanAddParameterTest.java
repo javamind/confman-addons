@@ -1,7 +1,6 @@
 package com.ninjamind.confman.operation;
 
-import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.operation.ConfmanAddParameter;
+import com.ninjamind.confman.dto.ParameterConfmanDto;
 import net.codestory.http.WebServer;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.AfterClass;
@@ -9,8 +8,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test of {@link com.ninjamind.confman.operation.ConfmanAddParameter}
@@ -28,10 +25,10 @@ public class ConfmanAddParameterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/api/paramvalue/APP/version/1.0.0/env/dev",
+                routes -> routes.get("/api/param/APP/version/1.0.0/env/dev",
                         Arrays.asList(
-                                new ConfmanDto().setId(17L).setCode("jdbc.url").setLabel("jdbc:oracle:thin:@oradev:1521:ORA"),
-                                new ConfmanDto().setId(21L).setCode("server.name").setLabel("WP450").setCodeInstance("WP450"))
+                                new ParameterConfmanDto().setId(17L).setCode("jdbc.url").setLabel("jdbc:oracle:thin:@oradev:1521:ORA"),
+                                new ParameterConfmanDto().setId(21L).setCode("server.name").setLabel("WP450").setType("INSTANCE"))
                 )
         ).startOnRandomPort();
     }

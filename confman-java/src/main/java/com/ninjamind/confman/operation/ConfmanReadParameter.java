@@ -1,7 +1,7 @@
 package com.ninjamind.confman.operation;
 
 import com.google.gson.Gson;
-import com.ninjamind.confman.dto.ConfmanDto;
+import com.ninjamind.confman.dto.ParameterConfmanDto;
 import com.ninjamind.confman.utils.HttpCalls;
 import com.ninjamind.confman.utils.Preconditions;
 
@@ -10,7 +10,7 @@ import com.ninjamind.confman.utils.Preconditions;
  *
  * @author Guillaume EHRET
  */
-public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadParameter, ConfmanDto> {
+public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadParameter, ParameterConfmanDto> {
 
     protected String appCode;
     protected String paramCode;
@@ -27,7 +27,7 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
      * @return
      */
     @Override
-    protected ConfmanDto executeAction() {
+    protected ParameterConfmanDto executeAction() {
         //URL construction
         String url = String.format("http://%s:%s/api/param/%s/app/%s", server, port, paramCode, appCode);
 
@@ -36,7 +36,7 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
         if (json != null && !json.isEmpty()) {
             //We use Gson to read the parameters values in the flow
             Gson gson = new Gson();
-            return gson.fromJson(json, ConfmanDto.class);
+            return gson.fromJson(json, ParameterConfmanDto.class);
         }
         return null;
     }
@@ -106,7 +106,7 @@ public class ConfmanReadParameter extends AbstractConfmanOperation<ConfmanReadPa
          * @throws IllegalStateException if the Insert has already been built, or if no column and no generated value
          * column has been specified.
          */
-        public ConfmanDto execute() {
+        public ParameterConfmanDto execute() {
             Preconditions.checkState(!built, ALREADY_BEEN_BUILT);
             built = true;
             return new ConfmanReadParameter(this).execute();

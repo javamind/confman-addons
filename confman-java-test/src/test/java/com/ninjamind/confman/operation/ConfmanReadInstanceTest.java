@@ -1,7 +1,6 @@
 package com.ninjamind.confman.operation;
 
-import com.ninjamind.confman.dto.ConfmanDto;
-import com.ninjamind.confman.operation.ConfmanReadInstance;
+import com.ninjamind.confman.dto.InstanceConfmanDto;
 import net.codestory.http.WebServer;
 import org.assertj.core.api.Assertions;
 import org.mockito.MockitoAnnotations;
@@ -25,7 +24,8 @@ public class ConfmanReadInstanceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         webServer = new WebServer(
-                routes -> routes.get("/api/instance/:code/app/:app/env/:env", (context, code, app, env) -> new ConfmanDto().setId(17L).setCode("WP450").setLabel("My instance"))
+                routes -> routes.get("/api/instance/:code/app/:app/env/:env",
+                        (context, code, app, env) -> new InstanceConfmanDto().setId(17L).setCode("WP450").setLabel("My instance"))
         ).startOnRandomPort();
     }
 

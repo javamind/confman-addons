@@ -26,6 +26,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
+        <confman.server.version>1.0.0-SNAPSHOT</confman.server.version>
     </properties>
 
     <licenses>
